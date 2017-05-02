@@ -1,6 +1,7 @@
 'use strict'
 
 const path = require(`path`)
+const { ProvidePlugin } = require(`webpack`)
 
 module.exports = {
   entry: {
@@ -23,7 +24,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue: 'vue/dist/vue.js'
+      vue: `vue/dist/vue.js`,
+      babel: `Babel`,
     }
-  }
+  },
 }

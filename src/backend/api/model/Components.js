@@ -19,7 +19,7 @@ class ComponentsModel {
    title,
    description,
    component
-  }  = {}) {
+  } = {}) {
     const [ id ] = await knex(`components`).insert({
       title,
       description,

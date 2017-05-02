@@ -11,7 +11,7 @@
       <p>
         Please consider:
         <ul>
-          <li>Currently only ES5 code is supported.</li>
+          <li>Currently only ES2015 code is supported.</li>
           <li>Components can not have childComponents yet.</li>
         </ul>
       </p>

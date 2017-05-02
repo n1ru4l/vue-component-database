@@ -1,5 +1,7 @@
 'use strict';
-//@TODO: What the fuck did the author do here???!ß1
+
+const { Babel } = global
+//@TODO: Understand what the fuck did the author do here???!ß1
 
 httpVueLoader.parseComponentURL = function(url) {
 
@@ -308,9 +310,13 @@ httpVueLoader.fromText = function(responseText) {
       var module = { exports:{} };
 
       if ( scriptElt !== null ) {
-
+        // Transform Code
+        const transformedCode = Babel.transform(scriptElt.textContent, {
+          presets: [`es2015`]
+        })
+        const { code } = transformedCode
         try {
-          Function('exports', 'require', 'module', scriptElt.textContent).call(module.exports, module.exports, httpVueLoader.require, module);
+          Function('exports', 'require', 'module', code).call(module.exports, module.exports, httpVueLoader.require, module);
         } catch(ex) {
 
           if ( !('lineNumber' in ex) ) {
@@ -324,6 +330,13 @@ httpVueLoader.fromText = function(responseText) {
         }
 
       }
+      for(let prop in module.exports.default) {
+        if (!module.exports.default.hasOwnProperty(prop)) {
+          continue
+        }
+        module.exports[prop] = module.exports.default[prop]
+      }
+      delete module.exports.default
 
       return Promise.resolve(module.exports)
         .then(function(exports) {

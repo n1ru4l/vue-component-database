@@ -38,6 +38,7 @@ router.get(/(?:\/|$)/, async (ctx) => {
         <main id="main">
           <router-view></router-view> ${``/* why ? */}
         </main>
+        <script src="https://unpkg.com/babel-standalone@6.24.0/babel.min.js"></script>
         <script src="/assets/main.bundle.js"></script>
       </body>
     </html>
