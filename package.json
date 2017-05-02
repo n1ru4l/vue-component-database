@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "author": {
+    "name": "Laurin Quast",
+    "email": "laurinquast@googlemail.com"
+  },
   "scripts": {
     "watch:be": "nodemon src/backend/main.js",
     "watch:fe": "webpack --config=webpack.config.js --watch"
