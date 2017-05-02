@@ -119,6 +119,93 @@ const data = [
       </style>
     `
   },
+  {
+    id: 5,
+    title: `ToDo List Component`,
+    description: `Basic ToDo List Component`,
+    component: `
+      <template>
+        <div class="todo-list">
+          <h1>ToDo List</h1>
+          <ul class="todo-list__list">
+            <li
+              v-for="todoItem in todoItems"
+              v-bind:class="{ 'todo-list-item--done' : todoItem.done }"
+            >
+              <input
+                v-model="todoItem.content"
+                type="text"
+                class="todo-list-item__input"
+              >
+              <input
+                v-model="todoItem.done"
+                type="checkbox"
+              >
+            </li>
+            <input
+              v-model="newItemContent"
+              type="text"
+            >
+            <button
+              :disabled="isAddDisabled"
+              v-on:click="addNewItem"
+            >Add</button>
+          </ul>
+        </div>
+      </template>
+      <script>
+        export default {
+          data: () => ({
+            todoItems: [
+              {
+                id: 1,
+                content: 'Buy milk',
+                done: false,
+              },
+              {
+                id: 2,
+                content: 'Take over the world',
+                done: false,
+              }
+            ],
+            newItemContent: '',
+          }),
+          methods: {
+            addNewItem() {
+              this.todoItems.push({
+                id: this.todoItems.length + 1,
+                content: this.newItemContent,
+                done: false,
+              })
+              this.newItemContent = ''
+            }
+          },
+          computed: {
+            isAddDisabled() {
+              return !this.newItemContent
+            }
+          }
+        }
+      </script>
+      <style scoped>
+        .todo-list {
+          padding: 20px;
+        }
+        
+        .todo-list__list {
+          padding: 0;
+        }
+        
+        .todo-list-item__input {
+          border: 0;
+        }
+        
+        .todo-list-item--done .todo-list-item__input {
+          text-decoration: line-through;
+        }
+      </style>
+    `
+  }
 ]
 
 exports.seed = async (knex) => {
