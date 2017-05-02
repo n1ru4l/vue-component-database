@@ -1,0 +1,36 @@
+# A component
+type Component {
+  # Id of the component
+  id: String!
+  # Title of the component
+  title: String!
+  # Description og the component
+  description: String!
+  # Component code of the single file component
+  component: String!
+}
+
+input ComponentInput {
+  title: String!
+  description: String!
+  component: String!
+}
+
+# All things you can query for
+type Query {
+  # All available components
+  components: [Component]!
+  # One component
+  component(id: String!): Component
+}
+
+type Mutation {
+  createComponent(component: ComponentInput!): Component!
+  # Deletes a component and returns the id of the deleted component
+  deleteComponent(componentId: String!): String
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
