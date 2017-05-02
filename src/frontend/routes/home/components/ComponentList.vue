@@ -44,7 +44,7 @@
       components: {
         type: Array,
         required: true,
-        default: [],
+        default: [], //@TODO: This is not that nice (reserved keyword in es6 ?!)
       },
       isLoading: {
         type: Number,
