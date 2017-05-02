@@ -4,6 +4,7 @@
     md-close-to="#component-adder-button"
     ref="dialogAddNewComponent"
     :md-esc-to-close="allowEscape"
+    :md-click-outside-to-close="allowEscape"
   >
     <md-dialog-title>Add new component</md-dialog-title>
 
@@ -20,13 +21,15 @@
           <label>Title</label>
           <md-input
            v-model="title"
-          ></md-input>
+          >
+          </md-input>
         </md-input-container>
         <md-input-container>
           <label>Description</label>
           <md-input
             v-model="description"
-          ></md-input>
+          >
+          </md-input>
         </md-input-container>
         <md-input-container>
           <label>Single File Component (*.vue)</label>
@@ -41,8 +44,19 @@
     </md-dialog-content>
 
     <md-dialog-actions>
-      <md-button class="md-primary" @click.native="onCancel">Cancel</md-button>
-      <md-button class="md-primary" @click.native="onCreateClicked">Create</md-button>
+      <md-button
+        class="md-primary"
+        @click.native="onCancel"
+      >
+        Cancel
+      </md-button>
+      <md-button
+        class="md-primary"
+        @click.native="onCreateClicked"
+        :disabled="isFormInvalid"
+      >
+        Create
+      </md-button>
     </md-dialog-actions>
   </md-dialog>
   </template>
@@ -67,7 +81,7 @@
       fileContents: null,
       title: ``,
       description: ``,
-      allowEscape: false,
+      allowEscape: false, //@TODO: change how dialog communicates with Main component
     }),
     watch: {
       show(show) {
@@ -100,9 +114,22 @@
         })
         this.title = ``
         this.description = ``
-        this.fileContent = ``
+        this.fileContents = ``
       }
-    }
+    },
+    computed: {
+      isFormInvalid() {
+        if (!this.fileContents) {
+          return true
+        } else if (!this.title) {
+          return true
+        } else if (!this.description) {
+          return true
+        }
+
+        return false
+      },
+    },
   }
 </script>
 <style>

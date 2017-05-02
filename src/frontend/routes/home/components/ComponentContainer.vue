@@ -1,27 +1,38 @@
 <template>
   <div class="component-container">
-    <div v-if="!componentId">
+    <template v-if="!componentId">
       Please select a component.
-    </div>
-    <div v-else-if="isComponentLoading">
+    </template>
+    <template v-else-if="isComponentLoading">
       Loading component...
-    </div>
-    <div v-else-if="isGeneratingComponent">
+    </template>
+    <template v-else-if="isGeneratingComponent">
       Generating component...
-    </div>
-    <div v-else-if="componentTagName">
-      <component :is="componentTagName"></component>
-    </div>
+    </template>
+    <template v-else-if="componentTagName">
+      <div class="component-container__render-section">
+        <component :is="componentTagName"></component>
+      </div>
+      <component-toolbar
+        :component="component"
+      >
+      </component-toolbar>
+    </template>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import gql from 'graphql-tag'
   import httpVueLoader from '../../../http-vue-loader'
+
+  import ComponentToolbar from './ComponentToolbar.vue'
+
   const QUERY_ONE_COMPONENT_BY_ID =  gql`
     query OneComponentById($componentId: String!) {
       component(id: $componentId) {
         id
+        title
+        description
         component
       }
     }
@@ -31,6 +42,9 @@
   let componentCache = new Map
 
   export default {
+    components: {
+      ComponentToolbar,
+    },
     apollo: {
       component() {
         return {
@@ -85,5 +99,11 @@
     align-items: center;
     justify-content: center;
     display: flex;
+    flex-flow: column;
+  }
+  .component-container__render-section {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
   }
 </style>

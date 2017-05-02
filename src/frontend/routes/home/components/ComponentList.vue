@@ -8,6 +8,7 @@
     <template v-else>
       <component-list-item
         v-for="component in components"
+        :key="component.id"
         :name="component.title"
         :description="component.description"
         :id="component.id"
