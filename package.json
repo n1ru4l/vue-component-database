@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "apollo-client": "^1.1.1",
+    "dotenv": "^4.0.0",
     "fs-promise": "^2.0.2",
     "graphql": "^0.9.5",
     "graphql-server-koa": "^0.7.2",
