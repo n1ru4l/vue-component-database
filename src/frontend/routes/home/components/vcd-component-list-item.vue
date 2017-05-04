@@ -36,12 +36,12 @@
       onDeleteClicked: {
         type: Function,
         required: true,
-      }
+      },
     },
     computed: {
-      attrHref () {
+      attrHref() {
         return `/${this.id}`
-      }
+      },
     },
   }
 </script>

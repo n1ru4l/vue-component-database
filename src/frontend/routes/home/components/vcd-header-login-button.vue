@@ -18,6 +18,7 @@
 </template>
 <script>
   const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${window.GITHUB_CLIENT_ID}&redirect_uri=http://localhost:4200/login`
+
   export default {
     data: () => ({
       href: GITHUB_LOGIN_URL,

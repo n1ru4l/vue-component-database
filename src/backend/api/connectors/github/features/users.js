@@ -3,7 +3,7 @@
 async function fetchCurrentUser() {
   if (!this.accessToken) return null
   const { data } = await this.getData({
-    path: `/user`
+    path: `/user`,
   })
   return data
 }

@@ -23,18 +23,17 @@
    * @param text
    */
   function download(filename, text) {
-    const pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    pom.setAttribute('download', filename);
+    const pom = document.createElement(`a`)
+    pom.setAttribute(`href`, `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`)
+    pom.setAttribute(`download`, filename)
 
-    if (document.createEvent) {
-      const event = document.createEvent('MouseEvents')
-      event.initEvent('click', true, true)
-      pom.dispatchEvent(event)
-    }
-    else {
+    if (!document.createEvent) {
       pom.click()
+      return
     }
+    const event = document.createEvent(`MouseEvents`)
+    event.initEvent(`click`, true, true)
+    pom.dispatchEvent(event)
   }
 
   export default {
@@ -42,14 +41,14 @@
       component: {
         type: Object,
         required: false,
-      }
+      },
     },
     methods: {
       onDownloadButtonClicked() {
         const { component } = this.component
-        download(`component.vue`,component) //@TODO: component-name should be specified
-      }
-    }
+        download(`component.vue`, component) // @TODO: component-name should be specified
+      },
+    },
   }
 </script>
 <style scoped>

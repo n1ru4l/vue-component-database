@@ -1,0 +1,9 @@
+{
+  "root": true,
+  "extends": "airbnb-base",
+  "rules": {
+    "semi": ["error", "never"],
+    "quotes": ["error", "backtick"],
+    "array-bracket-spacing": ["error", "always"]
+  }
+}

@@ -10,10 +10,11 @@
 </template>
 <script>
   import Authenticator from './../../../services/authenticator'
+
   export default {
     methods: {
       onClick() {
-        Authenticator.setToken('')
+        Authenticator.setToken(``)
         this.$apollo.provider.defaultClient.resetStore()
       },
     },

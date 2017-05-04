@@ -9,13 +9,13 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: `/`,
     component: Main,
   },
   {
-    path: '/:id',
+    path: `/:id`,
     component: Main,
-  }
+  },
 ]
 
 const router = new VueRouter({

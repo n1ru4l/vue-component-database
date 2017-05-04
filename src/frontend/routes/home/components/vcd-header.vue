@@ -46,13 +46,8 @@
         type: Number,
         required: true,
         default: 1,
-      }
+      },
     },
-    methods: {
-      onLoginClick() {
-        window.location = `https://github.com/login/oauth/authorize?client_id=${window.GITHUB_CLIENT_ID}&redirect_uri=http://localhost:4200/login`
-      }
-    }
   }
 </script>
 <style scoped>

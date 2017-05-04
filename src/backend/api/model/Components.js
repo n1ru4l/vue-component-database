@@ -20,7 +20,7 @@ class ComponentsModel {
   async create({
    title,
    description,
-   component
+   component,
   } = {}) {
     const [ id ] = await this.knex(`components`).insert({
       title,
@@ -28,7 +28,7 @@ class ComponentsModel {
       component,
     })
       .returning(`id`)
-    return await this.findOne({ id })
+    return this.findOne({ id })
   }
 
   async deleteById(id) {

@@ -26,7 +26,7 @@
   </md-list>
 </template>
 <script>
-  import vcdComponentListItem from './vcd-component-list-item.vue';
+  import vcdComponentListItem from './vcd-component-list-item.vue'
 
   export default {
     components: {
@@ -49,7 +49,7 @@
       isLoading: {
         type: Number,
         required: true,
-      }
+      },
     },
   }
 </script>

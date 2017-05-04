@@ -74,7 +74,7 @@
       onCreate: {
         type: Function,
         required: true,
-      }
+      },
     },
     data: () => ({
       file: null,
@@ -92,7 +92,7 @@
         }
 
         modalInstance.close()
-      }
+      },
     },
     methods: {
       onSelectFile(file) {
@@ -100,7 +100,7 @@
           return
         }
         const fileToRead = file[0]
-        const fileReader = new FileReader
+        const fileReader = new FileReader()
         fileReader.onload = () => {
           this.fileContents = fileReader.result
         }
@@ -115,7 +115,7 @@
         this.title = ``
         this.description = ``
         this.fileContents = ``
-      }
+      },
     },
     computed: {
       isFormInvalid() {

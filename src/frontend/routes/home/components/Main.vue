@@ -33,7 +33,7 @@
   import vcdComponentList from './vcd-component-list.vue'
   import vcdComponentContainer from './vcd-component-container.vue'
   import vcdComponentAdder from './vcd-component-adder.vue'
-  const httpVueLoader = require('../../../http-vue-loader')
+  import httpVueLoader from '../../../http-vue-loader'
 
   const QUERY_USER_DATA = gql`
     query currentUser {
@@ -94,7 +94,7 @@
           query: QUERY_USER_DATA,
           loadingKey: `isLoadingUser`,
         }
-      }
+      },
     },
     data() {
       return {
@@ -106,10 +106,10 @@
     },
     methods: {
       loadAsyncComponent() {
-          httpVueLoader(`/components/test-component.vue`)((component) => {
-              Vue.component(`sum-component-1`, component)
-              this.hasComponent = true
-          })
+        httpVueLoader(`/components/test-component.vue`)((component) => {
+          Vue.component(`sum-component-1`, component)
+          this.hasComponent = true
+        })
       },
       onAdderClicked() {
         this.isAddingNewComponent = true
@@ -124,18 +124,16 @@
             componentData: newComponentData,
           },
           updateQueries: {
-            allComponents: (prevResult, { mutationResult }) => {
-              return {
-                components: [...prevResult.components, mutationResult.data.createComponent]
-              }
-            }
-          }
+            allComponents: (prevResult, { mutationResult }) => ({
+              components: [ ...prevResult.components, mutationResult.data.createComponent ],
+            }),
+          },
         }).then(() => {
           this.isAddingNewComponent = false
         })
       },
       onDeleteComponent(componentId, ev) {
-        ev.preventDefault();
+        ev.preventDefault()
         this.$router.push(`/`)
         this.$apollo.mutate({
           mutation: MUTATION_DELETE_COMPONENT,
@@ -146,13 +144,15 @@
             allComponents: (prevResult, { mutationResult }) => {
               const deletedComponentId = mutationResult.data.deleteComponent
               return {
-                components: prevResult.components.filter(component => component.id !== deletedComponentId)
+                components: prevResult.components.filter(
+                  component => component.id !== deletedComponentId,
+                ),
               }
-            }
+            },
           },
         })
       },
-    }
+    },
   }
 </script>
 <style scoped>

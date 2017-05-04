@@ -3,7 +3,6 @@
 require(`dotenv`).config()
 
 const { stripIndent } = require(`common-tags`)
-const fetch = require(`isomorphic-fetch`)
 
 const Koa = require(`koa`)
 const createKoaRouter = require(`koa-router`)
@@ -35,7 +34,7 @@ router.get(`/login`, async (ctx) => {
 })
 
 router.get(/(?:\/|$)/, async (ctx) => {
-  //language=HTML
+  // language=HTML
   ctx.body = stripIndent`
     <!doctype html>
     <html>

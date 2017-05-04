@@ -14,15 +14,15 @@ networkInterface.use([
   {
     applyBatchMiddleware(req, next) {
       if (!req.options.headers) {
-        req.options.headers = {};  // Create the header object if needed.
+        req.options.headers = {}  // Create the header object if needed.
       }
-      let accessToken = Authenticator.getToken()
+      const accessToken = Authenticator.getToken()
       if (accessToken) {
-        req.options.headers['authorization'] = `Bearer ${accessToken}`
+        req.options.headers.authorization = `Bearer ${accessToken}`
       }
       next()
-    }
-  }
+    },
+  },
 ])
 
 // Create the apollo client

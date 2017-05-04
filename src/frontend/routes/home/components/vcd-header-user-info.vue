@@ -23,8 +23,8 @@
       avatarUrl: {
         type: String,
         required: true,
-      }
-    }
+      },
+    },
   }
 </script>
 <style scoped>

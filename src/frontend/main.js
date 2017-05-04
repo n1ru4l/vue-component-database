@@ -7,7 +7,7 @@ import apolloProvider from './apollo-provider'
 
 Vue.use(VueMaterial)
 
-const app = new Vue({
+new Vue({
   router,
   apolloProvider,
 }).$mount(`#main`)

@@ -22,20 +22,23 @@ class HttpException extends Error {
 }
 
 class GithubConnector {
+
   constructor({
-    baseUri = GITHUB_BASE_URI,
-    accessToken = null,
-  },
+      baseUri = GITHUB_BASE_URI,
+      accessToken = null,
+  } = {}, // eslint-disable-next-line indent
   features = [
     users,
   ]) {
     this.baseUri = baseUri
     this.accessToken = accessToken
-    this.credentials = `${accessToken !== null && accessToken.length > 0 ? 'token ' + accessToken : null}`
+    this.credentials = (accessToken !== null && accessToken.length > 0) ? `token ${accessToken}` : null
+
+    // eslint-disable-next-line quote-props
     this.headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/vnd.github.v3.full+json',
-      'Authorization': this.credentials,
+      'Content-Type': `application/json`,
+      Accept: `application/vnd.github.v3.full+json`,
+      Authorization: this.credentials,
     }
     return Object.assign(this, ...features)
   }
@@ -50,9 +53,9 @@ class GithubConnector {
     if (!response.ok) {
       throw new HttpException({
         message: `HttpException[${method}]`,
-        status:response.status,
-        statusText:response.statusText,
-        url: response.url
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url,
       })
     }
 
@@ -60,7 +63,7 @@ class GithubConnector {
     return response
   }
 
-  getData({path}) {
+  getData({ path }) {
     return this.callGitHubAPI({
       method: `GET`,
       path,
@@ -68,7 +71,7 @@ class GithubConnector {
     })
   }
 
-  deleteData({path}) {
+  deleteData({ path }) {
     return this.callGitHubAPI({
       method: `DELETE`,
       path,
@@ -76,7 +79,7 @@ class GithubConnector {
     })
   }
 
-  postData({path, data}) {
+  postData({ path, data }) {
     return this.callGitHubAPI({
       method: `POST`,
       path,
@@ -84,10 +87,11 @@ class GithubConnector {
     })
   }
 
-  putData({path, data}) {
+  putData({ path, data }) {
     return this.callGitHubAPI({
       method: `PUT`,
-      path, data
+      path,
+      data,
     })
   }
 }

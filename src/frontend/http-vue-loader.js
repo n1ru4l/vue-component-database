@@ -1,7 +1,6 @@
-'use strict';
-
+/* eslint-disable */
 const { Babel } = global
-//@TODO: Understand what the fuck did the author do here???!ß1
+// @TODO: Understand what the fuck did the author do here???!ß1
 
 httpVueLoader.parseComponentURL = function(url) {
 

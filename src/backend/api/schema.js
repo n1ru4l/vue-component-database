@@ -9,7 +9,7 @@ const resolvers = require(`./resolver`)
 
 const schema = fs.readFileSync(
   path.join(__dirname, `schema.graphql`),
-  `utf-8`
+  `utf-8`,
 )
 
 const executableSchema = makeExecutableSchema({

@@ -11,7 +11,7 @@ const { graphqlKoa, graphiqlKoa } = require(`graphql-server-koa`)
 
 const REGEX_PARSE_ACCESS_TOKEN = /Bearer (.*)$/
 
-function parseAccessToken (authHeader = null) {
+function parseAccessToken(authHeader = null) {
   if (!authHeader) return null
   const regexResult = authHeader.match(REGEX_PARSE_ACCESS_TOKEN)
   return regexResult[1]
@@ -25,7 +25,7 @@ const graphql = graphqlKoa(async (ctx) => {
   const Users = new UsersModel({ githubConnector, knexConnector })
   const Components = new ComponentsModel({ knexConnector })
 
-  let user = await Users.getCurrentUser()
+  const user = await Users.getCurrentUser()
 
   return {
     schema,
@@ -35,11 +35,11 @@ const graphql = graphqlKoa(async (ctx) => {
         Components,
       },
       user,
-    }
+    },
   }
 })
 
 module.exports = {
   graphql,
-  graphiql: graphiqlKoa({ endpointURL: '/graphql' }),
+  graphiql: graphiqlKoa({ endpointURL: `/graphql` }),
 }

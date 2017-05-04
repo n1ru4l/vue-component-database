@@ -27,7 +27,7 @@
 
   import vcdComponentToolbar from './vcd-component-toolbar.vue'
 
-  const QUERY_ONE_COMPONENT_BY_ID =  gql`
+  const QUERY_ONE_COMPONENT_BY_ID = gql`
     query OneComponentById($componentId: String!) {
       component(id: $componentId) {
         id
@@ -39,7 +39,7 @@
   `
 
   const COMPONENT_PREFIX = `custom-component-`
-  let componentCache = new Map
+  const componentCache = new Map() // @TODO: Poor man strikes again
 
   export default {
     components: {
@@ -59,27 +59,27 @@
           },
           loadingKey: `isComponentLoading`,
           result() {
-            let componentName = `${COMPONENT_PREFIX}-${this.componentId}`
+            const componentName = `${COMPONENT_PREFIX}-${this.componentId}`
             if (componentCache.get(componentName)) {
               this.componentTagName = componentName
               return
             }
             this.isGeneratingComponent = true
-            httpVueLoader.fromText(this.component.component).then(objComponent => {
+            httpVueLoader.fromText(this.component.component).then((objComponent) => {
               Vue.component(componentName, objComponent)
               componentCache.set(this.component.id, true)
               this.isGeneratingComponent = false
               this.componentTagName = componentName
             })
-          }
+          },
         }
-      }
+      },
     },
     props: {
       componentId: {
         type: String,
         required: false,
-      }
+      },
     },
     data: () => ({
       isComponentLoading: false,

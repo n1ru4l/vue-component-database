@@ -6,7 +6,7 @@ function shouldCheckToken(lastTokenCheck) {
   return Date.now() - lastTokenCheck > TIMESPAN_CHECK_ACCESS_TOKEN
 }
 
-const userCache = new Map //@TODO: Poor mans cache
+const userCache = new Map() // @TODO: Poor mans cache
 
 class User {
 
@@ -23,7 +23,7 @@ class User {
     if (!accessToken) return null
 
     let [ dbUser ] = await this.knex(`users`).where({
-      access_token: accessToken
+      access_token: accessToken,
     })
 
     if (dbUser) {
@@ -40,7 +40,7 @@ class User {
       return user
     }
 
-    let user = await this.github.fetchCurrentUser()
+    const user = await this.github.fetchCurrentUser()
     if (!user) return null
 
     dbUser = await this.whereGithubId(user.id)
@@ -67,6 +67,7 @@ class User {
     return user || null
   }
 
+// eslint-disable-next-line camelcase
   async whereGithubId(github_user_id) {
     const [ user ] = await this.knex(`users`).where({ github_user_id })
     return user || null
@@ -83,7 +84,7 @@ class User {
       access_token: accessToken,
       last_token_check: Date.now(),
     }).returning(`id`)
-    return await this.whereId(userId)
+    return this.whereId(userId)
   }
 }
 
