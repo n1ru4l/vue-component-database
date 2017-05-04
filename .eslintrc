@@ -1,4 +1,7 @@
 {
+  "parserOptions": {
+    "sourceType": "script"
+  },
   "root": true,
   "extends": "airbnb-base",
   "rules": {

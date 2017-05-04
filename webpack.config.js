@@ -1,14 +1,13 @@
 'use strict'
 
 const path = require(`path`)
-const { ProvidePlugin } = require(`webpack`)
 
 module.exports = {
   entry: {
-    main: path.join(__dirname, `src`, `frontend`, `main.js`),
+    main: path.join(__dirname, `src`, `client`, `main.js`),
   },
   output: {
-      filename: path.join(`build`, `[name].bundle.js`)
+    filename: path.join(`build`, `[name].bundle.js`),
   },
   module: {
     rules: [
@@ -18,14 +17,14 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [`style-loader`, `css-loader`],
-      }
+        use: [ `style-loader`, `css-loader` ],
+      },
     ],
   },
   resolve: {
     alias: {
       vue: `vue/dist/vue.js`,
       babel: `Babel`,
-    }
+    },
   },
 }

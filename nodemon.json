@@ -1,0 +1,5 @@
+{
+  "exec": "node src/server/main.js",
+  "watch": ["src/server"],
+  "ext": "js,graphql"
+}

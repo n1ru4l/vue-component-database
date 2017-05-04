@@ -8,7 +8,7 @@
     "email": "laurinquast@googlemail.com"
   },
   "scripts": {
-    "watch:be": "nodemon src/backend/main.js",
+    "watch:be": "nodemon --config=nodemon.json",
     "watch:fe": "webpack --config=webpack.config.js --watch",
     "lint": "eslint src"
   },
