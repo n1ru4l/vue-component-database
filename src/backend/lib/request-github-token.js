@@ -1,6 +1,6 @@
 'use strict'
 
-const fetch = require(`fetch`)
+const fetch = require(`isomorphic-fetch`)
 const FormData = require(`form-data`)
 const querystring = require('querystring')
 
