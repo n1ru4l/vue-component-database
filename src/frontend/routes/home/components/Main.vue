@@ -1,17 +1,10 @@
 <template>
   <div class="main-component">
-    <md-toolbar>
-      <md-button class="md-icon-button">
-        <md-icon>menu</md-icon>
-      </md-button>
-
-      <h2 class="md-title" style="flex: 1">
-        Vue Component Database
-      </h2>
-      <md-button class="md-icon-button">
-        <md-icon>search</md-icon>
-      </md-button>
-    </md-toolbar>
+    <vcd-header
+      :user="currentUser"
+      :isLoadingUser="isLoadingUser"
+    >
+    </vcd-header>
     <div class="site-container">
       <component-list
         :isLoading="isLoadingComponents"
@@ -36,17 +29,29 @@
 <script>
   import Vue from 'vue'
   import gql from 'graphql-tag'
+  import vcdHeader from './vcd-header.vue'
   import ComponentList from './ComponentList.vue'
   import ComponentContainer from './ComponentContainer.vue'
   import ComponentAdder from './ComponentAdder.vue'
   const httpVueLoader = require('../../../http-vue-loader')
 
+  const QUERY_USER_DATA = gql`
+    query currentUser {
+      currentUser {
+        id
+        login
+        avatarUrl
+      }
+    }
+  `
+
+
   const QUERY_ALL_COMPONENTS = gql`
     query allComponents {
       components {
-       id,
-       title,
-       description,
+       id
+       title
+       description
        component
      }
    }
@@ -72,6 +77,7 @@
 
   export default {
     components: {
+      vcdHeader,
       ComponentList,
       ComponentContainer,
       ComponentAdder,
@@ -82,11 +88,16 @@
           query: QUERY_ALL_COMPONENTS,
           loadingKey: `isLoadingComponents`,
         }
+      },
+      currentUser() {
+        return {
+          query: QUERY_USER_DATA,
+          loadingKey: `isLoadingUser`,
+        }
       }
     },
     data() {
       return {
-        target: `World`,
         hasComponent: false,
         componentName: `sum-component-1`,
         isAddingNewComponent: false,
@@ -140,7 +151,7 @@
             }
           },
         })
-      }
+      },
     }
   }
 </script>
@@ -148,15 +159,10 @@
   .main-component {
     height: 100vh;
   }
-  .main-component > md-toolbar {
-    height: 76px;
-  }
+
   .main-component > .site-container {
     height: calc(100vh - 64px);
     overflow: hidden;
     display: flex;
-  }
-  h1 {
-    color: red;
   }
 </style>

@@ -1,17 +1,19 @@
-const knex = require(`../connectors/knex`)
+'use strict'
 
 class ComponentsModel {
 
-  constructor() {
-
+  constructor({
+    knexConnector = null,
+  }) {
+    this.knex = knexConnector
   }
 
   findAll() {
-    return knex(`components`)
+    return this.knex(`components`)
   }
 
   async findOne(args) {
-    const [ component ] = await knex(`components`).where(args)
+    const [ component ] = await this.knex(`components`).where(args)
     return component || null
   }
 
@@ -20,7 +22,7 @@ class ComponentsModel {
    description,
    component
   } = {}) {
-    const [ id ] = await knex(`components`).insert({
+    const [ id ] = await this.knex(`components`).insert({
       title,
       description,
       component,
@@ -30,7 +32,7 @@ class ComponentsModel {
   }
 
   async deleteById(id) {
-    const result = await knex(`components`)
+    const result = await this.knex(`components`)
       .where({ id })
       .del()
     return result > 0 ? id : null

@@ -1,5 +1,7 @@
 'use strict'
 
+const { property } = require(`lodash`)
+
 module.exports = {
   // Mutation: {},
   Query: {
@@ -11,6 +13,9 @@ module.exports = {
     component(obj, args, { models }) {
       const { Components } = models
       return Components.findOne(args)
+    },
+    currentUser(obj, args, { user }) {
+      return user
     }
   },
   Mutation: {
@@ -22,5 +27,8 @@ module.exports = {
       const { Components } = models
       return Components.deleteById(componentId)
     }
-  }
+  },
+  User: {
+    avatarUrl: property(`avatar_url`),
+  },
 }

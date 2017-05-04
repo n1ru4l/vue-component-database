@@ -2,13 +2,19 @@
 
 require(`dotenv`).config()
 
+const { stripIndent } = require(`common-tags`)
+const fetch = require(`isomorphic-fetch`)
+
 const Koa = require(`koa`)
-const app = new Koa()
 const createKoaRouter = require(`koa-router`)
-const router = createKoaRouter()
 const koaSend = require(`koa-send`)
 const bodyParser = require(`koa-bodyparser`)
+
 const { graphql, graphiql } = require(`./api`)
+const requestGithubToken = require(`./lib/request-github-token`)
+
+const app = new Koa()
+const router = createKoaRouter()
 
 router.get(/^\/assets(?:\/|$)/, async (ctx) => {
   const assetPath = ctx.path.replace(/assets\//, ``)
@@ -17,19 +23,20 @@ router.get(/^\/assets(?:\/|$)/, async (ctx) => {
   })
 })
 
-// router.get(/^\/components(?:\/|$)/, async (ctx) => {
-//     const assetPath = ctx.path.replace(/components\//, ``)
-//     await koaSend(ctx, assetPath, {
-//         root: `${__dirname}/../../components`,
-//     })
-// })
-
 router.post(`/graphql`, graphql)
 router.get(`/graphiql`, graphiql)
 
+router.get(`/login`, async (ctx) => {
+  if (!ctx.request.query.code) {
+    return
+  }
+  const accessToken = await requestGithubToken(ctx.request.query.code)
+  ctx.redirect(`/login-success?access_token=${accessToken}`)
+})
+
 router.get(/(?:\/|$)/, async (ctx) => {
   //language=HTML
-  ctx.body = `
+  ctx.body = stripIndent`
     <!doctype html>
     <html>
       <head>
@@ -40,6 +47,9 @@ router.get(/(?:\/|$)/, async (ctx) => {
         <main id="main">
           <router-view></router-view> ${``/* why ? */}
         </main>
+        <script>
+          window.GITHUB_CLIENT_ID = "${process.env.GITHUB_CLIENT_ID}"
+        </script>
         <script src="https://unpkg.com/babel-standalone@6.24.0/babel.min.js"></script>
         <script src="/assets/main.bundle.js"></script>
       </body>

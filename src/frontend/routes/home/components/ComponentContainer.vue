@@ -59,7 +59,7 @@
           },
           loadingKey: `isComponentLoading`,
           result() {
-            let componentName = `${COMPONENT_PREFIX}-${this.component.id}`
+            let componentName = `${COMPONENT_PREFIX}-${this.componentId}`
             if (componentCache.get(componentName)) {
               this.componentTagName = componentName
               return
