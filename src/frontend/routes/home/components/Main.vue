@@ -143,10 +143,9 @@
           updateQueries: {
             allComponents: (prevResult, { mutationResult }) => {
               const deletedComponentId = mutationResult.data.deleteComponent
+              const componentFilter = component => component.id !== deletedComponentId
               return {
-                components: prevResult.components.filter(
-                  component => component.id !== deletedComponentId,
-                ),
+                components: prevResult.components.filter(componentFilter),
               }
             },
           },
