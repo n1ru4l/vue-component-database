@@ -1,12 +1,12 @@
 <template>
   <md-list
-    class="component-list"
+    class="vcd-component-list"
   >
     <template v-if="isLoading">
       Loading...
     </template>
     <template v-else>
-      <component-list-item
+      <vcd-component-list-item
         v-for="component in components"
         :key="component.id"
         :name="component.title"
@@ -14,7 +14,7 @@
         :id="component.id"
         :onDeleteClicked="onDeleteListItemClicked"
       >
-      </component-list-item>
+      </vcd-component-list-item>
     </template>
     <md-button
       class="component-list__adder md-icon-button md-raised md-dense"
@@ -26,11 +26,11 @@
   </md-list>
 </template>
 <script>
-  import ComponentListItem from './ComponentListItem.vue';
+  import vcdComponentListItem from './vcd-component-list-item.vue';
 
   export default {
     components: {
-      ComponentListItem,
+      vcdComponentListItem,
     },
     props: {
       onAdderClicked: {
@@ -54,11 +54,12 @@
   }
 </script>
 <style scoped>
-  .component-list {
+  .vcd-component-list {
     width: 30%;
     border-right: 1px solid rgba(0,0,0,.12);
     position: relative;
     padding-bottom: 0;
+    overflow-y: scroll;
   }
 
   .component-list__adder {

@@ -1,23 +1,23 @@
 <template>
-    <div class="component-toolbar">
-        <div class="component-toolbar__meta">
-            <strong>Title</strong>: {{component.title}}<br>
-            <strong>Description</strong>: {{component.description}}
-        </div>
-        <div class="component-toolbar__download">
-            <md-button
-              class="md-icon-button md-raised md-accent"
-              v-on:click.native="onDownloadButtonClicked"
-            >
-                <md-icon>file_download</md-icon>
-            </md-button>
-        </div>
+  <div class="vcd-component-toolbar">
+    <div class="component-toolbar__meta">
+      <strong>Title</strong>: {{component.title}}<br>
+      <strong>Description</strong>: {{component.description}}
     </div>
+    <div class="vcd-component-toolbar__download">
+      <md-button
+        class="md-icon-button md-raised md-accent"
+        v-on:click.native="onDownloadButtonClicked"
+      >
+        <md-icon>file_download</md-icon>
+      </md-button>
+    </div>
+  </div>
 </template>
 <script>
 
   /**
-   * might not work in IE
+   * Might not work in IE
    * @source http://stackoverflow.com/a/18197341/4202031
    * @param filename
    * @param text
@@ -53,7 +53,7 @@
   }
 </script>
 <style scoped>
-    .component-toolbar {
+    .vcd-component-toolbar {
       display: flex;
       align-self: flex-end;
       padding: 10px;
@@ -61,7 +61,7 @@
       color: white;
       background-color: #3f51b5;
     }
-    .component-toolbar__download {
+    .vcd-component-toolbar__download {
       margin-right: 0;
       margin-left: auto;
     }

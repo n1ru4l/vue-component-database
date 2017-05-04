@@ -6,33 +6,33 @@
     >
     </vcd-header>
     <div class="site-container">
-      <component-list
+      <vcd-component-list
         :isLoading="isLoadingComponents"
         :components="components"
         :onAdderClicked="onAdderClicked"
         :onDeleteListItemClicked="onDeleteComponent"
       >
-      </component-list>
-      <component-container
+      </vcd-component-list>
+      <vcd-component-container
         :componentId="$route.params.id"
       >
-      </component-container>
+      </vcd-component-container>
     </div>
-    <component-adder
+    <vcd-component-adder
       :show="isAddingNewComponent"
       :onCancel="onAdderCancel"
       :onCreate="onAdderCreate"
     >
-    </component-adder>
+    </vcd-component-adder>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import gql from 'graphql-tag'
   import vcdHeader from './vcd-header.vue'
-  import ComponentList from './ComponentList.vue'
-  import ComponentContainer from './ComponentContainer.vue'
-  import ComponentAdder from './ComponentAdder.vue'
+  import vcdComponentList from './vcd-component-list.vue'
+  import vcdComponentContainer from './vcd-component-container.vue'
+  import vcdComponentAdder from './vcd-component-adder.vue'
   const httpVueLoader = require('../../../http-vue-loader')
 
   const QUERY_USER_DATA = gql`
@@ -78,9 +78,9 @@
   export default {
     components: {
       vcdHeader,
-      ComponentList,
-      ComponentContainer,
-      ComponentAdder,
+      vcdComponentList,
+      vcdComponentAdder,
+      vcdComponentContainer,
     },
     apollo: {
       components() {

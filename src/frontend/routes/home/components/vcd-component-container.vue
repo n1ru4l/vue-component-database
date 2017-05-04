@@ -1,5 +1,5 @@
 <template>
-  <div class="component-container">
+  <div class="vcd-component-container">
     <template v-if="!componentId">
       Please select a component.
     </template>
@@ -10,13 +10,13 @@
       Generating component...
     </template>
     <template v-else-if="componentTagName">
-      <div class="component-container__render-section">
+      <div class="vcd-component-container__render-section">
         <component :is="componentTagName"></component>
       </div>
-      <component-toolbar
+      <vcd-component-toolbar
         :component="component"
       >
-      </component-toolbar>
+      </vcd-component-toolbar>
     </template>
   </div>
 </template>
@@ -25,7 +25,7 @@
   import gql from 'graphql-tag'
   import httpVueLoader from '../../../http-vue-loader'
 
-  import ComponentToolbar from './ComponentToolbar.vue'
+  import vcdComponentToolbar from './vcd-component-toolbar.vue'
 
   const QUERY_ONE_COMPONENT_BY_ID =  gql`
     query OneComponentById($componentId: String!) {
@@ -43,7 +43,7 @@
 
   export default {
     components: {
-      ComponentToolbar,
+      vcdComponentToolbar,
     },
     apollo: {
       component() {
@@ -93,15 +93,15 @@
     },
   }
 </script>
-<style>
-  .component-container {
+<style scoped>
+  .vcd-component-container {
     width: 70%;
     align-items: center;
     justify-content: center;
     display: flex;
     flex-flow: column;
   }
-  .component-container__render-section {
+  .vcd-component-container__render-section {
     flex-grow: 1;
     display: flex;
     align-items: center;
