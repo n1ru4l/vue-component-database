@@ -1,13 +1,17 @@
 'use strict'
 
+require(`dotenv`).config()
 const path = require(`path`)
+
 
 module.exports = {
   entry: {
     main: path.join(__dirname, `src`, `client`, `main.js`),
   },
   output: {
-    filename: path.join(`build`, `[name].bundle.js`),
+    path: path.resolve(__dirname, `./build`),
+    filename: `[name].bundle.js`,
+    publicPath: `/build/`,
   },
   module: {
     rules: [

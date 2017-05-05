@@ -64,6 +64,7 @@
 
   .component-list__adder {
     position: absolute;
+    z-index: 50;
     bottom: 0;
     right: 0;
     margin-bottom: 10px;
