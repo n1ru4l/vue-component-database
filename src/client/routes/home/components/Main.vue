@@ -6,13 +6,23 @@
     >
     </vcd-header>
     <div class="site-container">
-      <vcd-component-list
-        :isLoading="isLoadingComponents"
-        :components="components"
-        :onAdderClicked="onAdderClicked"
-        :onDeleteListItemClicked="onDeleteComponent"
-      >
-      </vcd-component-list>
+      <div class="site-container__side">
+        <vcd-component-list
+          :isLoading="isLoadingComponents"
+          :components="components"
+          :onAdderClicked="onAdderClicked"
+          :onDeleteListItemClicked="onDeleteComponent"
+        >
+        </vcd-component-list>
+        <md-button
+          class="component-list__adder md-icon-button md-raised md-dense"
+          id="component-adder-button"
+          v-on:click.native="onAdderClicked"
+        >
+          <md-icon>add</md-icon>
+        </md-button>
+      </div>
+
       <vcd-component-container
         :componentId="$route.params.id"
       >
@@ -27,13 +37,11 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
   import gql from 'graphql-tag'
   import vcdHeader from './vcd-header.vue'
   import vcdComponentList from './vcd-component-list.vue'
   import vcdComponentContainer from './vcd-component-container.vue'
   import vcdComponentAdder from './vcd-component-adder.vue'
-  import httpVueLoader from '../../../http-vue-loader'
 
   const QUERY_USER_DATA = gql`
     query currentUser {
@@ -45,18 +53,17 @@
     }
   `
 
-
   const QUERY_ALL_COMPONENTS = gql`
     query allComponents {
       components {
-       id
-       title
-       description
-       component
-       author {
-         id
-         login
-       }
+        id
+        title
+        description
+        component
+        author {
+          id
+          login
+        }
      }
    }
   `
@@ -70,7 +77,7 @@
         component
         author {
           id
-          name
+          login
         }
       }
     }
@@ -106,19 +113,13 @@
     },
     data() {
       return {
-        hasComponent: false,
-        componentName: `sum-component-1`,
-        isAddingNewComponent: false,
+        isAddingNewComponent: 0,
+        isLoadingComponents: 0,
+        isLoadingUser: 0,
         components: [],
       }
     },
     methods: {
-      loadAsyncComponent() {
-        httpVueLoader(`/components/test-component.vue`)((component) => {
-          Vue.component(`sum-component-1`, component)
-          this.hasComponent = true
-        })
-      },
       onAdderClicked() {
         this.isAddingNewComponent = true
       },
@@ -171,5 +172,20 @@
     height: calc(100vh - 64px);
     overflow: hidden;
     display: flex;
+  }
+
+  .site-container__side {
+    width: 30%;
+    display: flex;
+    position: relative;
+  }
+
+  .component-list__adder {
+    position: absolute;
+    z-index: 50;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 10px;
+    margin-right: 10px;
   }
 </style>

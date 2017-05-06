@@ -17,13 +17,6 @@
       >
       </vcd-component-list-item>
     </template>
-    <md-button
-      class="component-list__adder md-icon-button md-raised md-dense"
-      id="component-adder-button"
-      v-on:click.native="onAdderClicked"
-    >
-      <md-icon>add</md-icon>
-    </md-button>
   </md-list>
 </template>
 <script>
@@ -34,10 +27,6 @@
       vcdComponentListItem,
     },
     props: {
-      onAdderClicked: {
-        type: Function,
-        required: true,
-      },
       onDeleteListItemClicked: {
         type: Function,
         required: true,
@@ -45,7 +34,7 @@
       components: {
         type: Array,
         required: true,
-        default: [], //@TODO: This is not that nice (reserved keyword in es6 ?!)
+        default: [],
       },
       isLoading: {
         type: Number,
@@ -56,19 +45,8 @@
 </script>
 <style scoped>
   .vcd-component-list {
-    width: 30%;
     border-right: 1px solid rgba(0,0,0,.12);
-    position: relative;
     padding-bottom: 0;
     overflow-y: scroll;
-  }
-
-  .component-list__adder {
-    position: absolute;
-    z-index: 50;
-    bottom: 0;
-    right: 0;
-    margin-bottom: 10px;
-    margin-right: 10px;
   }
 </style>
