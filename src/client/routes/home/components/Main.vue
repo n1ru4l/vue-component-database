@@ -53,6 +53,10 @@
        title
        description
        component
+       author {
+         id
+         login
+       }
      }
    }
   `
@@ -64,6 +68,10 @@
         title
         description
         component
+        author {
+          id
+          name
+        }
       }
     }
   `

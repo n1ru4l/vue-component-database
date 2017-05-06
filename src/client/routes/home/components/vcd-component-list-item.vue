@@ -2,11 +2,11 @@
   <md-list-item>
     <router-link :to="attrHref">
       <md-avatar>
-        LEL
+        WUT
       </md-avatar>
 
       <div class="md-list-text-container">
-        <span>{{ name }}</span>
+        <span>{{authorLogin}} / <b>{{name}}</b></span>
         <p>{{ description }}</p>
       </div>
       <md-button
@@ -30,6 +30,10 @@
         required: true,
       },
       id: {
+        type: String,
+        required: true,
+      },
+      authorLogin: {
         type: String,
         required: true,
       },

@@ -3,7 +3,7 @@
 const data = [
   {
     id: 1,
-    title: `Sample Component 1`,
+    title: `sample-component-1`,
     description: `This is a sample component`,
     component: `
       <template>
@@ -31,7 +31,7 @@ const data = [
   },
   {
     id: 2,
-    title: `Input component`,
+    title: `input-component`,
     description: `This is a sample component`,
     component: `
       <template>
@@ -62,7 +62,7 @@ const data = [
   },
   {
     id: 3,
-    title: `Increment Component`,
+    title: `increment-component`,
     description: `This is a sample component`,
     component: `
       <template>
@@ -90,7 +90,7 @@ const data = [
   },
   {
     id: 4,
-    title: `ES2015 Add Component`,
+    title: `add-component`,
     description: `A component that uses ES2015 code like 'export default' shich is not supported by V8 yet.`,
     component: `
       <template>
@@ -127,7 +127,7 @@ const data = [
   },
   {
     id: 5,
-    title: `ToDo List Component`,
+    title: `todo-list`,
     description: `Basic ToDo List Component`,
     component: `
       <template>

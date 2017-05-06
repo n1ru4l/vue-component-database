@@ -11,6 +11,7 @@
         :key="component.id"
         :name="component.title"
         :description="component.description"
+        :authorLogin="component.author.login"
         :id="component.id"
         :onDeleteClicked="onDeleteListItemClicked"
       >
