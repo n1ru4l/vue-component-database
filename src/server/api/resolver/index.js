@@ -17,16 +17,27 @@ module.exports = {
     },
   },
   Mutation: {
-    createComponent(obj, { component }, { models }) {
+    createComponent(obj, { component }, { user, models }) {
+      if (!user) throw new Error(`Must be authenticated.`)
       const { Components } = models
-      return Components.create(component)
+      return Components.create(Object.assign({}, component, { authorId: user.id }))
     },
-    deleteComponent(obj, { componentId }, { models }) {
+    async deleteComponent(obj, { componentId }, { user, models }) {
+      if (!user) throw new Error(`Must be authenticated.`)
       const { Components } = models
+      const component = await Components.findWhereId(componentId)
+      if (!component) throw new Error(`Component not found`)
+      if (component.author_id !== user.id) throw new Error(`Not allowed to delete this component`)
       return Components.deleteById(componentId)
     },
   },
   User: {
     avatarUrl: property(`avatar_url`),
+  },
+  Component: {
+    author(component, params, { models }) {
+      const { Users } = models
+      return Users.whereId(component.author_id)
+    },
   },
 }

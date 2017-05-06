@@ -17,17 +17,23 @@ class ComponentsModel {
     return component || null
   }
 
+  async findWhereId(id) {
+    const [ component ] = await this.knex(`components`).where({ id })
+    return component || null
+  }
+
   async create({
    title,
    description,
    component,
+   authorId,
   } = {}) {
     const [ id ] = await this.knex(`components`).insert({
       title,
       description,
       component,
-    })
-      .returning(`id`)
+      author_id: authorId,
+    }).returning(`id`)
     return this.findOne({ id })
   }
 

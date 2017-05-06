@@ -1,3 +1,5 @@
+'use strict'
+
 const data = [
   {
     id: 1,
@@ -24,7 +26,8 @@ const data = [
           color: green;
         }
       </style>
-    `
+    `,
+    author_id: 14338007,
   },
   {
     id: 2,
@@ -54,7 +57,8 @@ const data = [
           color: green;
         }
       </style>
-    `
+    `,
+    author_id: 14338007,
   },
   {
     id: 3,
@@ -81,7 +85,8 @@ const data = [
           color: green;
         }
       </style>
-    `
+    `,
+    author_id: 14338007,
   },
   {
     id: 4,
@@ -117,7 +122,8 @@ const data = [
           background-color: green;
         }
       </style>
-    `
+    `,
+    author_id: 14338007,
   },
   {
     id: 5,
@@ -204,8 +210,9 @@ const data = [
           text-decoration: line-through;
         }
       </style>
-    `
-  }
+    `,
+    author_id: 14338007,
+  },
 ]
 
 exports.seed = async (knex) => {

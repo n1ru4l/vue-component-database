@@ -6,8 +6,6 @@ function shouldCheckToken(lastTokenCheck) {
   return Date.now() - lastTokenCheck > TIMESPAN_CHECK_ACCESS_TOKEN
 }
 
-const userCache = new Map() // @TODO: Poor mans cache
-
 class User {
 
   constructor({
@@ -18,6 +16,7 @@ class User {
     this.github = githubConnector
   }
 
+  // @TODO: Encrypt/decrypt accessToken ?
   async getCurrentUser() {
     const { accessToken } = this.github
     if (!accessToken) return null
@@ -27,39 +26,37 @@ class User {
     })
 
     if (dbUser) {
-      let user = userCache.get(dbUser.id)
-
-      if (shouldCheckToken(dbUser.last_token_check) || !user) {
-        user = await this.github.fetchCurrentUser()
-        userCache.set(dbUser.id, user)
-        await this.knex(`users`).update({
-          last_token_check: Date.now(),
-        }).where({ id: dbUser.id })
-      }
-
-      return user
+      if (!shouldCheckToken(dbUser.last_token_check)) return dbUser
+      const githubUser = await this.github.fetchCurrentUser()
+      await this.knex(`users`).update({
+        login: githubUser.login,
+        avatar_url: githubUser.avatar_url,
+        last_token_check: Date.now(),
+      }).where({ id: dbUser.id })
+      return this.whereId(dbUser.id)
     }
 
-    const user = await this.github.fetchCurrentUser()
-    if (!user) return null
+    const githubUser = await this.github.fetchCurrentUser()
+    if (!githubUser) return null
 
-    dbUser = await this.whereGithubId(user.id)
+    dbUser = await this.whereId(githubUser.id)
     if (dbUser) {
       await this.knex(`users`).update({
+        login: githubUser.login,
+        avatar_url: githubUser.avatar_url,
         last_token_check: Date.now(),
         access_token: accessToken,
       }).where({ id: dbUser.id })
-      return user
+      return this.whereId(dbUser.id)
     }
 
     // Auto-Create User
-    await this.create({
-      login: user.login,
-      githubUserId: user.id,
+    return this.create({
+      login: githubUser.login,
+      id: githubUser.id,
+      avatarUrl: githubUser.avatar_url,
       accessToken,
     })
-
-    return user
   }
 
   async whereId(id) {
@@ -67,20 +64,16 @@ class User {
     return user || null
   }
 
-// eslint-disable-next-line camelcase
-  async whereGithubId(github_user_id) {
-    const [ user ] = await this.knex(`users`).where({ github_user_id })
-    return user || null
-  }
-
   async create({
+    id = null,
     login = null,
-    githubUserId = null,
+    avatarUrl = null,
     accessToken = this.accessToken,
   }) {
     const [ userId ] = await this.knex(`users`).insert({
+      id,
       login,
-      github_user_id: githubUserId,
+      avatar_url: avatarUrl,
       access_token: accessToken,
       last_token_check: Date.now(),
     }).returning(`id`)

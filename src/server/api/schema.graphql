@@ -18,6 +18,8 @@ type Component {
   description: String!
   # Component code of the single file component
   component: String!
+  # The author who submitted the component
+  author: User!
 }
 
 input ComponentInput {
