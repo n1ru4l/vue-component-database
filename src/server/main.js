@@ -44,7 +44,6 @@ router.get(/(?:\/|$)/, async (ctx) => {
       </head>
       <body>
         <main id="main">
-          <router-view></router-view> ${``/* why ? */}
         </main>
         <script>
           window.GITHUB_CLIENT_ID = "${process.env.GITHUB_CLIENT_ID}"
