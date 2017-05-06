@@ -1,57 +1,42 @@
 <template>
-  <div class="main-component">
-    <vcd-header
-      :user="currentUser"
-      :isLoadingUser="isLoadingUser"
-    >
-    </vcd-header>
-    <div class="site-container">
-      <div class="site-container__side">
-        <vcd-component-list
-          :isLoading="isLoadingComponents"
-          :components="components"
-          :onAdderClicked="onAdderClicked"
-          :onDeleteListItemClicked="onDeleteComponent"
-        >
-        </vcd-component-list>
-        <md-button
-          class="component-list__adder md-icon-button md-raised md-dense"
-          id="component-adder-button"
-          v-on:click.native="onAdderClicked"
-        >
-          <md-icon>add</md-icon>
-        </md-button>
-      </div>
-
-      <vcd-component-container
-        :componentId="$route.params.id"
+  <div class="site-container">
+    <div class="site-container__side">
+      <vcd-component-list
+        :isLoading="isLoadingComponents"
+        :components="components"
+        :onAdderClicked="onAdderClicked"
+        :onDeleteListItemClicked="onDeleteComponent"
       >
-      </vcd-component-container>
+      </vcd-component-list>
+      <md-button
+        class="component-list__adder md-icon-button md-raised md-dense"
+        id="component-adder-button"
+        v-on:click.native="onAdderClicked"
+      >
+        <md-icon>add</md-icon>
+      </md-button>
     </div>
-    <vcd-component-adder
-      :show="isAddingNewComponent"
-      :onCancel="onAdderCancel"
-      :onCreate="onAdderCreate"
+
+    <vcd-component-container
+      :componentId="$route.params.id"
     >
-    </vcd-component-adder>
+    </vcd-component-container>
+    <template v-if="currentUser">
+      <vcd-component-adder
+        :show="isAddingNewComponent"
+        :onCancel="onAdderCancel"
+        :onCreate="onAdderCreate"
+      >
+      </vcd-component-adder>
+    </template>
   </div>
 </template>
 <script>
   import gql from 'graphql-tag'
-  import vcdHeader from './vcd-header.vue'
+  import vcdHeader from '../../../components/vcd-header.vue'
   import vcdComponentList from './vcd-component-list.vue'
   import vcdComponentContainer from './vcd-component-container.vue'
   import vcdComponentAdder from './vcd-component-adder.vue'
-
-  const QUERY_USER_DATA = gql`
-    query currentUser {
-      currentUser {
-        id
-        login
-        avatarUrl
-      }
-    }
-  `
 
   const QUERY_ALL_COMPONENTS = gql`
     query allComponents {
@@ -104,16 +89,16 @@
           loadingKey: `isLoadingComponents`,
         }
       },
-      currentUser() {
-        return {
-          query: QUERY_USER_DATA,
-          loadingKey: `isLoadingUser`,
-        }
+    },
+    props: {
+      currentUser: {
+        type: Object,
+        required: false,
       },
     },
     data() {
       return {
-        isAddingNewComponent: 0,
+        isAddingNewComponent: false,
         isLoadingComponents: 0,
         isLoadingUser: 0,
         components: [],

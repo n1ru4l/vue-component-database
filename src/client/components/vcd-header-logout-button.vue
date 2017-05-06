@@ -9,7 +9,7 @@
   </md-button>
 </template>
 <script>
-  import Authenticator from './../../../services/authenticator'
+  import Authenticator from '../services/authenticator'
 
   export default {
     methods: {
