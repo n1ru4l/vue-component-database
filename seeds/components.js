@@ -1,11 +1,13 @@
 'use strict'
 
+const { stripIndent } = require(`common-tags`)
+
 const data = [
   {
     id: 1,
     title: `sample-component-1`,
     description: `This is a sample component`,
-    component: `
+    component: stripIndent`
       <template>
         <div>Sample component 1 {{sumVariable}} <button v-on:click="doSth">Click me!</button></div>
       </template>
@@ -33,7 +35,7 @@ const data = [
     id: 2,
     title: `input-component`,
     description: `This is a sample component`,
-    component: `
+    component: stripIndent`
       <template>
         <div>
           Input value: {{sumVariable}} <br>
@@ -64,21 +66,21 @@ const data = [
     id: 3,
     title: `increment-component`,
     description: `This is a sample component`,
-    component: `
+    component: stripIndent`
       <template>
         <div>Increment component {{number}}<button v-on:click="doSth">Click me!</button></div>
       </template>
       <script>
-          module.exports = {
-            data: () =>  ({
-              number: 0
-            }),
-            methods: {
-              doSth() {
-                this.number++
-              }
+        module.exports = {
+          data: () =>  ({
+            number: 0
+          }),
+          methods: {
+            doSth() {
+              this.number++
             }
           }
+        }
       </script>
       <style scoped>
         button {
@@ -92,7 +94,7 @@ const data = [
     id: 4,
     title: `add-component`,
     description: `A component that uses ES2015 code like 'export default' shich is not supported by V8 yet.`,
-    component: `
+    component: stripIndent`
       <template>
         <div>
           <h1>Enter two numbers</h1>
@@ -129,7 +131,7 @@ const data = [
     id: 5,
     title: `todo-list`,
     description: `Basic ToDo List Component`,
-    component: `
+    component: stripIndent`
       <template>
         <div class="todo-list">
           <h1>ToDo List</h1>

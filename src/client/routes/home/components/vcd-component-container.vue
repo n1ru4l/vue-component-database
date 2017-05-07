@@ -10,21 +10,35 @@
       Generating component...
     </template>
     <template v-else-if="componentTagName">
-      <div class="vcd-component-container__render-section">
-        <component :is="componentTagName"></component>
+      <div class="vcd-component-container__upper">
+          <vcd-code-editor
+            :code="component.component"
+            :isVisible="isCodeEditorVisible"
+          />
+        <div class="vcd-component-container__render-section">
+          <div class="vcd-icon-bar">
+            <mu-icon-button
+              class="vcd-edit-button"
+              icon="mode_edit"
+              v-on:click="toggleCodeEditorVisibility"
+            />
+          </div>
+          <component :is="componentTagName"></component>
+        </div>
       </div>
       <vcd-component-toolbar
         :component="component"
-      >
-      </vcd-component-toolbar>
+      />
     </template>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import gql from 'graphql-tag'
+  import muIconButton from 'muse-ui/src/iconButton'
   import httpVueLoader from '../../../http-vue-loader'
 
+  import vcdCodeEditor from './vcd-code-editor.vue'
   import vcdComponentToolbar from './vcd-component-toolbar.vue'
 
   const QUERY_ONE_COMPONENT_BY_ID = gql`
@@ -43,6 +57,8 @@
 
   export default {
     components: {
+      muIconButton,
+      vcdCodeEditor,
       vcdComponentToolbar,
     },
     apollo: {
@@ -85,25 +101,47 @@
       isComponentLoading: false,
       componentTagName: null,
       isGeneratingComponent: false,
+      isCodeEditorVisible: false,
     }),
     computed: {
       hasComponent() {
         return !!this.component
       },
     },
+    methods: {
+      toggleCodeEditorVisibility() {
+        this.isCodeEditorVisible = !this.isCodeEditorVisible;
+      },
+    },
   }
 </script>
-<style scoped>
+<style>
   .vcd-component-container {
     flex-grow: 1;
-    align-items: center;
-    justify-content: center;
     display: flex;
     flex-flow: column;
   }
-  .vcd-component-container__render-section {
+
+  .vcd-component-container__upper {
+    display: flex;
     flex-grow: 1;
+  }
+
+  .vcd-component-container__upper > * {
+    flex-basis: 50%;
+  }
+
+  .vcd-component-container__render-section {
+    position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+  }
+
+  .vcd-icon-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 </style>
