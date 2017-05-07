@@ -1,13 +1,7 @@
 <template>
-  <md-toolbar>
-    <md-button class="md-icon-button">
-      <md-icon>menu</md-icon>
-    </md-button>
-
-    <h2 class="md-title" style="flex: 1">
-      Vue Component Database
-    </h2>
-
+  <mu-app-bar
+    title="Vue Component Database"
+  >
     <template v-if="isLoadingUser">
       LOADING...
     </template>
@@ -15,24 +9,29 @@
       <vcd-header-user-info
         :login="user.login"
         :avatarUrl="user.avatarUrl"
-      >
-      </vcd-header-user-info>
-      <vcd-header-logout-button>
-      </vcd-header-logout-button>
+        slot="right"
+      />
+      <vcd-header-logout-button
+        slot="right"
+      />
     </template>
     <template v-else="">
-      <vcd-header-login-button>
-      </vcd-header-login-button>
+      <vcd-header-login-button
+        slot="right"
+      />
     </template>
-  </md-toolbar>
+  </mu-app-bar>
 </template>
 <script>
+  import muAppBar from 'muse-ui/src/appBar'
+
   import vcdHeaderLoginButton from './vcd-header-login-button.vue'
   import vcdHeaderUserInfo from './vcd-header-user-info.vue'
   import vcdHeaderLogoutButton from './vcd-header-logout-button.vue'
 
   export default {
     components: {
+      muAppBar,
       vcdHeaderLoginButton,
       vcdHeaderUserInfo,
       vcdHeaderLogoutButton,

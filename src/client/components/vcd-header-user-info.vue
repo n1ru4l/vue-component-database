@@ -1,20 +1,18 @@
 <template>
-  <md-button
-    class="md-default"
-  >
-    <span>
-      {{login}}
-    </span>
-    <md-avatar>
-      <img
-        :src="avatarUrl"
-        alt="Avatar"
-      >
-    </md-avatar>
-  </md-button>
+  <div class="vcd-header-user-info">
+    <span>Logged in as {{login}}</span>
+    <mu-avatar
+      :src="avatarUrl"
+    />
+  </div>
 </template>
 <script>
+  import muAvatar from 'muse-ui/src/avatar'
+
   export default {
+    components: {
+      muAvatar,
+    },
     props: {
       login: {
         type: String,
@@ -28,17 +26,17 @@
   }
 </script>
 <style scoped>
-  .md-button {
+  .vcd-header-user-info {
     display: flex;
     align-items: center;
-    color: #fff;
+    padding: 0 10px;
   }
 
-  .md-button > span {
+  span {
     padding-right: 10px;
   }
 
-  .md-avatar {
+  .mu-avatar {
     width: 25px;
     min-width: 25px;
     height: 25px;
