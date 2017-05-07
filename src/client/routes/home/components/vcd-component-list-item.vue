@@ -1,25 +1,28 @@
 <template>
-  <md-list-item>
-    <router-link :to="attrHref">
-      <md-avatar>
-        WUT
-      </md-avatar>
-
-      <div class="md-list-text-container">
-        <span>{{authorLogin}} / <b>{{name}}</b></span>
-        <p>{{ description }}</p>
-      </div>
-      <md-button
-        class="md-icon-button md-list-action"
-        v-on:click.native="onDeleteClicked(id, $event)"
-      >
-        <md-icon>delete</md-icon>
-      </md-button>
-    </router-link>
-  </md-list-item>
+  <mu-list-item
+    :to="attrHref"
+  >
+    <mu-icon slot="left" value="inbox"/>
+    <span slot="title">{{authorLogin}} / <b>{{name}}</b></span>
+    <span slot="describe">{{ description }}</span>
+    <mu-icon-button
+      slot="right"
+      icon="delete"
+      v-on:click.native="onDeleteClicked(id, $event)"
+    />
+  </mu-list-item>
 </template>
 <script>
+  import { listItem as muListItem } from 'muse-ui/src/list'
+  import muIcon from 'muse-ui/src/icon'
+  import muIconButton from 'muse-ui/src/iconButton'
+
   export default {
+    components: {
+      muIconButton,
+      muListItem,
+      muIcon,
+    },
     props: {
       name: {
         type: String,
@@ -49,8 +52,8 @@
     },
   }
 </script>
-<style scoped>
-  .md-list-item {
-    border-bottom: 1px solid rgba(0,0,0,.12);
+<style>
+  .router-link-active .mu-item-title-row {
+    color: #7e57c2;
   }
 </style>

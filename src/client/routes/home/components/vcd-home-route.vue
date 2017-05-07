@@ -8,13 +8,13 @@
         :onDeleteListItemClicked="onDeleteComponent"
       >
       </vcd-component-list>
-      <md-button
-        class="component-list__adder md-icon-button md-raised md-dense"
-        id="component-adder-button"
+      <mu-float-button
+        icon="add"
+        secondary
+        mini
+        class="component-adder-button"
         v-on:click.native="onAdderClicked"
-      >
-        <md-icon>add</md-icon>
-      </md-button>
+      />
     </div>
 
     <vcd-component-container
@@ -33,6 +33,8 @@
 </template>
 <script>
   import gql from 'graphql-tag'
+  import muFloatButton from 'muse-ui/src/floatButton'
+
   import vcdHeader from '../../../components/vcd-header.vue'
   import vcdComponentList from './vcd-component-list.vue'
   import vcdComponentContainer from './vcd-component-container.vue'
@@ -77,6 +79,7 @@
 
   export default {
     components: {
+      muFloatButton,
       vcdHeader,
       vcdComponentList,
       vcdComponentAdder,
@@ -165,7 +168,7 @@
     position: relative;
   }
 
-  .component-list__adder {
+  .component-adder-button {
     position: absolute;
     z-index: 50;
     bottom: 0;

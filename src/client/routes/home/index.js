@@ -1,3 +1,3 @@
-import MainComponent from './components/Main.vue'
+import vcdHomeRoute from './components/vcd-home-route.vue'
 
-export default MainComponent
+export default vcdHomeRoute

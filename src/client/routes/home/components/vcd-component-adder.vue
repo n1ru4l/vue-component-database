@@ -1,67 +1,61 @@
 <template>
-  <md-dialog
-    md-open-from="#component-adder-button"
-    md-close-to="#component-adder-button"
-    ref="dialogAddNewComponent"
-    :md-esc-to-close="allowEscape"
-    :md-click-outside-to-close="allowEscape"
+  <mu-dialog
+    :open="show"
+    title="Add new component"
   >
-    <md-dialog-title>Add new component</md-dialog-title>
-
-    <md-dialog-content>
-      <p>
-        Please consider:
-        <ul>
-          <li>Currently only ES2015 code is supported.</li>
-          <li>Components can not have childComponents yet.</li>
-        </ul>
-      </p>
-      <form>
-        <md-input-container>
-          <label>Title</label>
-          <md-input
-           v-model="title"
-          >
-          </md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Description</label>
-          <md-input
-            v-model="description"
-          >
-          </md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Single File Component (*.vue)</label>
-          <md-file
-            v-model="file"
-            required
-            @selected="onSelectFile"
-          >
-          </md-file>
-        </md-input-container>
-      </form>
-    </md-dialog-content>
-
-    <md-dialog-actions>
-      <md-button
-        class="md-primary"
-        @click.native="onCancel"
+    <p>
+      Please consider:
+      <ul>
+        <li>Currently only ES2015 code is supported.</li>
+        <li>Components can not have childComponents yet.</li>
+      </ul>
+    </p>
+    <form>
+      <mu-text-field
+        label="Title"
+        v-model="title"
+        fullWidth
+      />
+      <mu-text-field
+        label="Description"
+        v-model="description"
+        fullWidth
+      />
+      <mu-raised-button
+        label="Choose Single File COmponent (.vue)"
       >
-        Cancel
-      </md-button>
-      <md-button
-        class="md-primary"
-        @click.native="onCreateClicked"
-        :disabled="isFormInvalid"
-      >
-        Create
-      </md-button>
-    </md-dialog-actions>
-  </md-dialog>
-  </template>
+        <input
+          type="file"
+          class="file-button"
+          @change="onSelectFile"
+        >
+      </mu-raised-button>
+    </form>
+    <mu-flat-button
+      slot="actions"
+      @click="onCancel"
+      label="Close"
+    />
+    <mu-flat-button
+      slot="actions"
+      @click="onCreateClicked"
+      label="Create"
+    />
+  </mu-dialog>
+</template>
 <script>
+  import muDialog from 'muse-ui/src/dialog'
+  import muTextField from 'muse-ui/src/textField'
+  import muFlatButton from 'muse-ui/src/flatButton'
+  import muRaisedButton from 'muse-ui/src/raisedButton'
+
   export default {
+    components: {
+      muDialog,
+      muTextField,
+      muFlatButton,
+      muRaisedButton,
+    },
     props: {
       show: {
         type: Boolean,
@@ -83,23 +77,13 @@
       description: ``,
       allowEscape: false, //@TODO: change how dialog communicates with Main component
     }),
-    watch: {
-      show(show) {
-        const modalInstance = this.$refs[`dialogAddNewComponent`]
-        if (show) {
-          modalInstance.open()
-          return
-        }
-
-        modalInstance.close()
-      },
-    },
     methods: {
-      onSelectFile(file) {
-        if (!file.length) {
+      onSelectFile(ev) {
+        const { files } = ev.target
+        if (!files.length) {
           return
         }
-        const fileToRead = file[0]
+        const fileToRead = files[0]
         const fileReader = new FileReader()
         fileReader.onload = () => {
           this.fileContents = fileReader.result
@@ -133,6 +117,15 @@
   }
 </script>
 <style>
+  .file-button{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+  }
+
   .md-dialog {
     width: 600px;
   }

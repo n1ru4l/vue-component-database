@@ -5,16 +5,17 @@
       <strong>Description</strong>: {{component.description}}
     </div>
     <div class="vcd-component-toolbar__download">
-      <md-button
-        class="md-icon-button md-raised md-accent"
+      <mu-float-button
+        icon="file_download"
+        secondary
+        mini
         v-on:click.native="onDownloadButtonClicked"
-      >
-        <md-icon>file_download</md-icon>
-      </md-button>
+      />
     </div>
   </div>
 </template>
 <script>
+  import muFloatButton from 'muse-ui/src/floatButton'
 
   /**
    * Might not work in IE
@@ -37,6 +38,9 @@
   }
 
   export default {
+    components: {
+      muFloatButton,
+    },
     props: {
       component: {
         type: Object,
@@ -58,7 +62,7 @@
       padding: 10px;
       width: 100%;
       color: white;
-      background-color: #3f51b5;
+      background-color: #7e57c2;
     }
     .vcd-component-toolbar__download {
       margin-right: 0;
