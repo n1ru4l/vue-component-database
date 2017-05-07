@@ -3,3 +3,5 @@
 !/build/.gitkeep
 /database.sqlite3
 /.env
+/.idea
+.DS_STORE
