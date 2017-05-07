@@ -1,5 +1,5 @@
 <template>
-  <md-list
+  <mu-list
     class="vcd-component-list"
   >
     <template v-if="isLoading">
@@ -17,13 +17,15 @@
       >
       </vcd-component-list-item>
     </template>
-  </md-list>
+  </mu-list>
 </template>
 <script>
+  import { list as muList } from 'muse-ui/src/list'
   import vcdComponentListItem from './vcd-component-list-item.vue'
 
   export default {
     components: {
+      muList,
       vcdComponentListItem,
     },
     props: {

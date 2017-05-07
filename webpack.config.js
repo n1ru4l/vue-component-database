@@ -3,7 +3,6 @@
 require(`dotenv`).config()
 const path = require(`path`)
 
-
 module.exports = {
   entry: {
     main: path.join(__dirname, `src`, `client`, `main.js`),
@@ -15,6 +14,10 @@ module.exports = {
   },
   module: {
     rules: [
+    //   {
+    //     test: /muse-ui.src.*?js/,
+    //     loader: `babel-loader`,
+    //   },
       {
         test: /\.vue$/,
         loader: `vue-loader`,
@@ -23,6 +26,10 @@ module.exports = {
         test: /\.css$/,
         use: [ `style-loader`, `css-loader` ],
       },
+      {
+        test: /\.less$/,
+        use: [ `style-loader`, `css-loader`, `less-loader` ],
+      },
     ],
   },
   resolve: {
@@ -30,5 +37,12 @@ module.exports = {
       vue: `vue/dist/vue.js`,
       babel: `Babel`,
     },
+    extensions: [
+      `.webpack.js`,
+      `.web.js`,
+      `.js`,
+      `.json`,
+      `.vue`,
+    ],
   },
 }

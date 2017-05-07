@@ -1,17 +1,17 @@
 <template>
-  <md-button
-    class="md-icon-button"
+  <mu-icon-button
     @click.native="onClick"
-  >
-    <md-icon>
-        exit_to_app
-    </md-icon>
-  </md-button>
+    icon="exit_to_app"
+  />
 </template>
 <script>
-  import Authenticator from './../../../services/authenticator'
+  import muIconButton from 'muse-ui/src/iconButton'
+  import Authenticator from '../services/authenticator'
 
   export default {
+    components: {
+      muIconButton,
+    },
     methods: {
       onClick() {
         Authenticator.setToken(``)
@@ -21,4 +21,5 @@
   }
 </script>
 <style scoped>
+
 </style>

@@ -1,15 +1,14 @@
 import Vue from 'vue'
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.css'
+import 'muse-ui/src/styles/base.less'
 
 import router from './router'
 import apolloProvider from './apollo-provider'
 
-Vue.use(VueMaterial)
+import vcdMainComponent from './components/vcd-main-component.vue'
 
-new Vue({
+const RootComponent = Vue.extend(vcdMainComponent)
+
+new RootComponent({
   router,
   apolloProvider,
 }).$mount(`#main`)
-
-// const component = httpVueLoader(`//components/Test.vue`)
