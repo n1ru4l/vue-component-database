@@ -2,8 +2,25 @@
 
 require(`dotenv`).config()
 const path = require(`path`)
+const ExtractTextPlugin = require(`extract-text-webpack-plugin`)
+const webpack = require(`webpack`)
+const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
+const BundleAnalyzerPlugin = require(`webpack-bundle-analyzer`).BundleAnalyzerPlugin
 
-module.exports = {
+const IS_PRODUCTION = process.env.NODE_ENV === `production`
+
+const extractStyles = new ExtractTextPlugin({
+  disable: !IS_PRODUCTION,
+  filename: `main.css`,
+})
+
+const definePlugin = new webpack.DefinePlugin({
+  'process.env': {
+    NODE_ENV: IS_PRODUCTION ? `'production'` : `'development'`,
+  },
+})
+
+const BASE_CONFIG = {
   entry: {
     main: path.join(__dirname, `src`, `client`, `main.js`),
   },
@@ -14,27 +31,35 @@ module.exports = {
   },
   module: {
     rules: [
-    //   {
-    //     test: /muse-ui.src.*?js/,
-    //     loader: `babel-loader`,
-    //   },
+      {
+        test: /\.js$/,
+        loader: `babel-loader`,
+      },
       {
         test: /\.vue$/,
         loader: `vue-loader`,
+        options: {
+          extractCSS: IS_PRODUCTION,
+        },
       },
       {
         test: /\.css$/,
-        use: [ `style-loader`, `css-loader` ],
+        use: extractStyles.extract({
+          fallback: [ `style-loader` ],
+          use: `css-loader`,
+        }),
       },
       {
         test: /\.less$/,
-        use: [ `style-loader`, `css-loader`, `less-loader` ],
+        use: extractStyles.extract({
+          fallback: [ `style-loader` ],
+          use: [ `css-loader`, `less-loader` ],
+        }),
       },
     ],
   },
   resolve: {
     alias: {
-      vue: `vue/dist/vue.js`,
       babel: `Babel`,
     },
     extensions: [
@@ -45,4 +70,27 @@ module.exports = {
       `.vue`,
     ],
   },
+  plugins: [
+    extractStyles,
+    definePlugin,
+  ],
 }
+
+if (IS_PRODUCTION) {
+  const optimizeCssAssetsPlugin = new OptimizeCssAssetsPlugin()
+  const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin()
+  const bundleAnalyzerPlugin = new BundleAnalyzerPlugin({
+    analyzerMode: `static`,
+    reportFilename: `bundle.info.html`,
+  })
+  BASE_CONFIG.plugins.push(
+    optimizeCssAssetsPlugin,
+    uglifyJsPlugin,
+    bundleAnalyzerPlugin
+  )
+} else {
+  BASE_CONFIG.devtool = `#cheap-module-eval-source-map`
+  BASE_CONFIG.resolve.alias.vue = `vue/dist/vue.js`
+}
+
+exports.default = BASE_CONFIG
