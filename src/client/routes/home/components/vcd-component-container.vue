@@ -95,7 +95,7 @@
 </script>
 <style scoped>
   .vcd-component-container {
-    width: 70%;
+    flex-grow: 1;
     align-items: center;
     justify-content: center;
     display: flex;

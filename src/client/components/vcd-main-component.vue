@@ -3,10 +3,12 @@
     <vcd-header
       :user="currentUser"
       :isLoadingUser="isLoadingUser"
+      :onMenuIconClicked="toggleIsSidebarActive"
     >
     </vcd-header>
     <router-view
       :currentUser="currentUser"
+      :isSidebarActive="isSidebarActive"
     >
     </router-view>
   </div>
@@ -40,7 +42,13 @@
     data: () => ({
       isUserLoading: 0,
       currentUser: null,
+      isSidebarActive: true,
     }),
+    methods: {
+      toggleIsSidebarActive() {
+        this.isSidebarActive = !this.isSidebarActive
+      },
+    },
   }
 </script>
 <style>

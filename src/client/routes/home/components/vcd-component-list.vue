@@ -47,6 +47,8 @@
 </script>
 <style scoped>
   .vcd-component-list {
+    width: 400px;
+    white-space: nowrap;
     border-right: 1px solid rgba(0,0,0,.12);
     padding-bottom: 0;
     overflow-y: scroll;

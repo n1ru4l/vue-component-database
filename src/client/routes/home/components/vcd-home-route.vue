@@ -1,6 +1,9 @@
 <template>
   <div class="site-container">
-    <div class="site-container__side">
+    <div
+      class="site-container__side"
+      v-bind:class="{ 'site-container__side--show': isSidebarActive }"
+    >
       <vcd-component-list
         :isLoading="isLoadingComponents"
         :components="components"
@@ -98,6 +101,10 @@
         type: Object,
         required: false,
       },
+      isSidebarActive: {
+        type: Boolean,
+        required: true,
+      },
     },
     data() {
       return {
@@ -153,19 +160,28 @@
 </script>
 <style scoped>
   .main-component {
+    display: flex;
+    flex-flow: column;
     height: 100vh;
   }
 
-  .main-component > .site-container {
+  .site-container {
     height: calc(100vh - 64px);
     overflow: hidden;
     display: flex;
+    position: relative;
   }
 
   .site-container__side {
-    width: 30%;
+    width: 0%;
+    overflow: hidden;
     display: flex;
     position: relative;
+    transition: width .3s ease;
+  }
+
+  .site-container__side--show {
+    width: 400px;
   }
 
   .component-adder-button {

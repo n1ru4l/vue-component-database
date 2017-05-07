@@ -2,6 +2,11 @@
   <mu-app-bar
     title="Vue Component Database"
   >
+    <mu-icon-button
+      icon="menu"
+      slot="left"
+      v-on:click="onMenuIconClicked"
+    />
     <template v-if="isLoadingUser">
       LOADING...
     </template>
@@ -24,6 +29,7 @@
 </template>
 <script>
   import muAppBar from 'muse-ui/src/appBar'
+  import muIconButton from 'muse-ui/src/iconButton'
 
   import vcdHeaderLoginButton from './vcd-header-login-button.vue'
   import vcdHeaderUserInfo from './vcd-header-user-info.vue'
@@ -32,6 +38,7 @@
   export default {
     components: {
       muAppBar,
+      muIconButton,
       vcdHeaderLoginButton,
       vcdHeaderUserInfo,
       vcdHeaderLogoutButton,
@@ -46,11 +53,12 @@
         required: true,
         default: 1,
       },
+      onMenuIconClicked: {
+        type: Function,
+        required: true,
+      },
     },
   }
 </script>
 <style scoped>
-  md-toolbar {
-    height: 76px;
-  }
 </style>
