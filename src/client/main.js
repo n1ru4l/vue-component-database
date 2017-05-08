@@ -8,6 +8,7 @@ import vcdMainComponent from './components/vcd-main-component.vue'
 
 const RootComponent = Vue.extend(vcdMainComponent)
 
+// eslint-disable-next-line no-new
 new RootComponent({
   el: `#main`,
   router,
