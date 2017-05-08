@@ -33,6 +33,10 @@ router.get(`/login`, async (ctx) => {
   ctx.redirect(`/login-success?access_token=${accessToken}`)
 })
 
+const BUNDLE_URL = (process.env.NODE_ENV === `production`)
+  ? `/assets/main.bundle.js`
+  : `http://localhost:${process.env.WEBPACK_DEV_PORT}/build/main.bundle.js`
+
 router.get(/(?:\/|$)/, async (ctx) => {
   // language=HTML
   ctx.body = stripIndent`
@@ -51,7 +55,7 @@ router.get(/(?:\/|$)/, async (ctx) => {
           window.GITHUB_CLIENT_ID = "${process.env.GITHUB_CLIENT_ID}"
         </script>
         <script src="https://unpkg.com/babel-standalone@6.24.0/babel.min.js"></script>
-        <script src="/assets/main.bundle.js"></script>
+        <script src="${BUNDLE_URL}"></script>
       </body>
     </html>
   `

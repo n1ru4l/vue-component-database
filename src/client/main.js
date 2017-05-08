@@ -9,6 +9,7 @@ import vcdMainComponent from './components/vcd-main-component.vue'
 const RootComponent = Vue.extend(vcdMainComponent)
 
 new RootComponent({
+  el: `#main`,
   router,
   apolloProvider,
-}).$mount(`#main`)
+})

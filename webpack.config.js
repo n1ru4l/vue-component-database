@@ -74,6 +74,9 @@ const BASE_CONFIG = {
     extractStyles,
     definePlugin,
   ],
+  devServer: {
+    port: process.env.WEBPACK_DEV_PORT,
+  },
 }
 
 if (IS_PRODUCTION) {
@@ -91,6 +94,9 @@ if (IS_PRODUCTION) {
 } else {
   BASE_CONFIG.devtool = `#cheap-module-eval-source-map`
   BASE_CONFIG.resolve.alias.vue = `vue/dist/vue.js`
+
+  const hotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin()
+  BASE_CONFIG.plugins.push(hotModuleReplacementPlugin)
 }
 
 exports.default = BASE_CONFIG
