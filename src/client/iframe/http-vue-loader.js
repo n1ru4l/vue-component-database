@@ -1,6 +1,6 @@
 /* eslint-disable */
-const { Babel } = global
 // @TODO: Understand what the fuck did the author do here???!ß1
+const Babel = require(`babel-standalone`)
 
 httpVueLoader.parseComponentURL = function(url) {
 

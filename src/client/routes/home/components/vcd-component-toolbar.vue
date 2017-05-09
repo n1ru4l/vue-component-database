@@ -59,6 +59,7 @@
     .vcd-component-toolbar {
       display: flex;
       align-self: flex-end;
+      flex-shrink: 0;
       padding: 10px;
       width: 100%;
       color: white;

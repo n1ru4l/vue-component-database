@@ -3,12 +3,14 @@
     class="vcd-code-editor"
     v-bind:class="{ 'vcd-code-editor--show': isVisible }"
     :options="editorOptions"
-    :value="code"
+    v-model="currentCode"
+    ref="leEditor"
   />
 </template>
 <script>
   import cmCodeMirror from 'vue-codemirror-lite/codemirror.vue'
   import 'codemirror/mode/vue/vue'
+  import { debounce } from 'lodash'
 
   export default {
     components: {
@@ -29,15 +31,41 @@
         required: true,
       },
     },
-    data: () => ({
-      editorOptions: {
-        tabSize: 2,
-        mode: `text/x-vue`,
-        lineNumbers: true,
-        line: true,
-        styleSelectedText: true,
+    data() {
+      const onSave = () => {
+        this.debounceCodeChanged()
+        return false
+      }
+
+      return {
+        editorOptions: {
+          tabSize: 2,
+          mode: `text/x-vue`,
+          lineNumbers: true,
+          line: true,
+          styleSelectedText: true,
+          extraKeys: {
+            [`Ctrl-S`]: onSave,
+            [`Cmd-S`]: onSave,
+          },
+        },
+        currentCode: ``,
+      }
+    },
+    created() {
+      this.currentCode = this.code
+      this.debounceCodeChanged = debounce(() => {
+        this.onCodeChanged(this.currentCode)
+      }, 500)
+      this.onCodeChanged(this.currentCode)
+    },
+    watch: {
+      code(newCode, oldCode) {
+        if (newCode === oldCode) return
+        this.currentCode = newCode
+        this.debounceCodeChanged()
       },
-    }),
+    },
   }
 </script>
 <style>

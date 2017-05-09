@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "apollo-client": "^1.1.1",
+    "babel-standalone": "^6.24.0",
     "codemirror": "^5.25.2",
     "common-tags": "^1.4.0",
     "cross-env": "^4.0.0",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
+    "babel-plugin-lodash": "^3.2.11",
     "babel-preset-env": "^1.4.0",
     "css-loader": "^0.28.0",
     "eslint": "^3.19.0",

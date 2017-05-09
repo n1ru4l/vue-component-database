@@ -26,7 +26,7 @@ class User {
     })
 
     if (dbUser) {
-      if (!shouldCheckToken(dbUser.last_token_check)) return dbUser
+      if (process.env.NODE_ENV !== `production` || !shouldCheckToken(dbUser.last_token_check)) return dbUser
       const githubUser = await this.github.fetchCurrentUser()
       await this.knex(`users`).update({
         login: githubUser.login,

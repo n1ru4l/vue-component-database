@@ -152,6 +152,7 @@ const data = [
             </li>
             <input
               v-model="newItemContent"
+              @keyup.enter="addNewItem"
               type="text"
             >
             <button
@@ -180,6 +181,7 @@ const data = [
           }),
           methods: {
             addNewItem() {
+              if (!this.newItemContent) return
               this.todoItems.push({
                 id: this.todoItems.length + 1,
                 content: this.newItemContent,

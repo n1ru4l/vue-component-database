@@ -17,12 +17,14 @@ const extractStyles = new ExtractTextPlugin({
 const definePlugin = new webpack.DefinePlugin({
   'process.env': {
     NODE_ENV: IS_PRODUCTION ? `'production'` : `'development'`,
+    WEBPACK_DEV_PORT: IS_PRODUCTION ? null : `'${process.env.WEBPACK_DEV_PORT}'`,
   },
 })
 
 const BASE_CONFIG = {
   entry: {
     main: path.join(__dirname, `src`, `client`, `main.js`),
+    iframe: path.join(__dirname, `src`, `client`, `iframe`, `index.js`),
   },
   output: {
     path: path.resolve(__dirname, `./build`),
@@ -34,6 +36,7 @@ const BASE_CONFIG = {
       {
         test: /\.js$/,
         loader: `babel-loader`,
+        exclude: /babel-standalone/,
       },
       {
         test: /\.vue$/,
@@ -76,6 +79,11 @@ const BASE_CONFIG = {
   ],
   devServer: {
     port: process.env.WEBPACK_DEV_PORT,
+    headers: {
+      "Access-Control-Allow-Origin": `*`,
+      "Access-Control-Allow-Methods": `GET, POST, PUT, DELETE, PATCH, OPTIONS`,
+      "Access-Control-Allow-Headers": `X-Requested-With, content-type, Authorization`
+    },
   },
 }
 

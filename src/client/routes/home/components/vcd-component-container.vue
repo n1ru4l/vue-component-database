@@ -6,25 +6,27 @@
     <template v-else-if="isComponentLoading">
       Loading component...
     </template>
-    <template v-else-if="isGeneratingComponent">
-      Generating component...
-    </template>
-    <template v-else-if="componentTagName">
+    <template v-else>
       <div class="vcd-component-container__upper">
-          <vcd-code-editor
-            :code="component.component"
-            :isVisible="isCodeEditorVisible"
-          />
-        <div class="vcd-component-container__render-section">
-          <div class="vcd-icon-bar">
+        <vcd-code-editor
+          :code="component.component"
+          :isVisible="isCodeEditorVisible"
+          :onCodeChanged="onCodeChanged"
+        />
+        <vcd-component-viewer
+          :code="code"
+        >
+          <div
+            class="vcd-icon-bar"
+            slot="buttons"
+          >
             <mu-icon-button
               class="vcd-edit-button"
               icon="mode_edit"
               v-on:click="toggleCodeEditorVisibility"
             />
           </div>
-          <component :is="componentTagName"></component>
-        </div>
+        </vcd-component-viewer>
       </div>
       <vcd-component-toolbar
         :component="component"
@@ -33,13 +35,13 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
   import gql from 'graphql-tag'
   import muIconButton from 'muse-ui/src/iconButton'
-  import httpVueLoader from '../../../http-vue-loader'
+//  import httpVueLoader from '../../../http-vue-loader'
 
   import vcdCodeEditor from './vcd-code-editor.vue'
   import vcdComponentToolbar from './vcd-component-toolbar.vue'
+  import vcdComponentViewer from './vcd-component-viewer.vue'
 
   const QUERY_ONE_COMPONENT_BY_ID = gql`
     query OneComponentById($componentId: String!) {
@@ -59,6 +61,7 @@
     components: {
       muIconButton,
       vcdCodeEditor,
+      vcdComponentViewer,
       vcdComponentToolbar,
     },
     apollo: {
@@ -75,18 +78,19 @@
           },
           loadingKey: `isComponentLoading`,
           result() {
-            const componentName = `${COMPONENT_PREFIX}-${this.componentId}`
-            if (componentCache.get(componentName)) {
-              this.componentTagName = componentName
-              return
-            }
-            this.isGeneratingComponent = true
-            httpVueLoader.fromText(this.component.component).then((objComponent) => {
-              Vue.component(componentName, objComponent)
-              componentCache.set(this.component.id, true)
-              this.isGeneratingComponent = false
-              this.componentTagName = componentName
-            })
+//            const componentName = `${COMPONENT_PREFIX}-${this.componentId}`
+//            if (componentCache.get(componentName)) {
+//              this.componentTagName = componentName
+//              return
+//            }
+//            this.isGeneratingComponent = true
+//            httpVueLoader.fromText(this.component.component).then((objComponent) => {
+//              Vue.component(componentName, objComponent)
+//              componentCache.set(this.component.id, true)
+//              this.isGeneratingComponent = false
+//              this.componentOptions = objComponent
+//              this.componentTagName = componentName
+//            })
           },
         }
       },
@@ -102,6 +106,8 @@
       componentTagName: null,
       isGeneratingComponent: false,
       isCodeEditorVisible: false,
+      componentOptions: {},
+      code: ``,
     }),
     computed: {
       hasComponent() {
@@ -110,7 +116,17 @@
     },
     methods: {
       toggleCodeEditorVisibility() {
-        this.isCodeEditorVisible = !this.isCodeEditorVisible;
+        this.isCodeEditorVisible = !this.isCodeEditorVisible
+      },
+      onCodeChanged(code) {
+        this.code = code
+//        this.isGeneratingComponent = true
+//        httpVueLoader.fromText(code).then((objComponent) => {
+////          Vue.component(this.componentTagName, objComponent)
+////          componentCache.set(this.component.id, true)
+//          this.componentOptions = objComponent
+//          this.isGeneratingComponent = false
+//        })
       },
     },
   }
@@ -129,14 +145,6 @@
 
   .vcd-component-container__upper > * {
     flex-basis: 50%;
-  }
-
-  .vcd-component-container__render-section {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
   }
 
   .vcd-icon-bar {
