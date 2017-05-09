@@ -53,9 +53,6 @@
     }
   `
 
-  const COMPONENT_PREFIX = `custom-component-`
-  const componentCache = new Map() // @TODO: Poor man strikes again
-
   export default {
     components: {
       muIconButton,
@@ -76,21 +73,6 @@
             return !this.componentId
           },
           loadingKey: `isComponentLoading`,
-          result() {
-//            const componentName = `${COMPONENT_PREFIX}-${this.componentId}`
-//            if (componentCache.get(componentName)) {
-//              this.componentTagName = componentName
-//              return
-//            }
-//            this.isGeneratingComponent = true
-//            httpVueLoader.fromText(this.component.component).then((objComponent) => {
-//              Vue.component(componentName, objComponent)
-//              componentCache.set(this.component.id, true)
-//              this.isGeneratingComponent = false
-//              this.componentOptions = objComponent
-//              this.componentTagName = componentName
-//            })
-          },
         }
       },
     },
@@ -119,13 +101,6 @@
       },
       onCodeChanged(code) {
         this.code = code
-//        this.isGeneratingComponent = true
-//        httpVueLoader.fromText(code).then((objComponent) => {
-////          Vue.component(this.componentTagName, objComponent)
-////          componentCache.set(this.component.id, true)
-//          this.componentOptions = objComponent
-//          this.isGeneratingComponent = false
-//        })
       },
     },
   }
