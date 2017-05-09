@@ -37,7 +37,6 @@
 <script>
   import gql from 'graphql-tag'
   import muIconButton from 'muse-ui/src/iconButton'
-//  import httpVueLoader from '../../../http-vue-loader'
 
   import vcdCodeEditor from './vcd-code-editor.vue'
   import vcdComponentToolbar from './vcd-component-toolbar.vue'
