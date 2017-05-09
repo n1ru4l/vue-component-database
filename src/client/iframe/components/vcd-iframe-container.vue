@@ -6,7 +6,7 @@
 </template>
 <script>
   import vcdComponentProxy from './vcd-component-proxy.vue'
-  import httpVueLoader from './../http-vue-loader'
+  import { createVueComponentOptions } from '../../lib/vue-loader'
 
   export default {
     components: {
@@ -20,10 +20,9 @@
       handleMessage(event) {
         // @TODO: Security?
         if (event.data.type !== `codeUpdate`) return
-
-        httpVueLoader.fromText(event.data.code).then((objComponent) => {
-          this.componentOptions = objComponent
-        })
+        const componentOptions = createVueComponentOptions(event.data.parts)
+        this.componentOptions = componentOptions
+        this.componentProperties = {} // @TODO: Implement component properties
       },
     },
     mounted() {

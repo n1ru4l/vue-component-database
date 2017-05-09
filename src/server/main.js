@@ -46,7 +46,7 @@ router.get(/(?:\/|$)/, async (ctx) => {
         <title>Vue.js Component Database</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        ${process.env.NODE_ENV === `production` ? `<link href="/assets/main.css" rel="stylesheet">` : ``}
+        ${process.env.NODE_ENV === `production` ? `<link href="/assets/main.bundle.css" rel="stylesheet">` : ``}
       </head>
       <body>
         <main id="main">

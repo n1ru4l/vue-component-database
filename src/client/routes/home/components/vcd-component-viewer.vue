@@ -9,53 +9,73 @@
   </div>
 </template>
 <script>
-  import vcdComponentProxy from '../../../iframe/components/vcd-component-proxy.vue'
+  import {
+    flow as compose,
+    update,
+  } from 'lodash'
+  import {
+    getPartsFromDoc,
+    replaceECMAExportWithCJSExport
+  } from '../../../lib/vue-parser'
+
+  const { Babel } = global
+
+  const transformCodeToEs5 = compose(
+    replaceECMAExportWithCJSExport,
+    code => Babel.transform(code, { presets: [ `es2015` ] }).code
+  )
+
+  const codeToParts = compose(
+    getPartsFromDoc,
+    parts => update(parts, `scriptDoc`, transformCodeToEs5)
+  )
 
   const BUNDLE_URL = (process.env.NODE_ENV === `production`)
     ? `/assets/iframe.bundle.js`
     : `http://localhost:${process.env.WEBPACK_DEV_PORT}/build/iframe.bundle.js`
 
+  /* eslint-disable no-param-reassign */
+  const prepareIframe = iframe => new Promise((resolve) => {
+    iframe.src = `about:blank`
+    iframe.onload = () => {
+      iframe.contentWindow.document.documentElement.innerHTML = `
+        <head></head>
+        <body>
+          <main id="main"></main>
+        </body>
+      `
+      const elements = []
+      const scriptTag = document.createElement(`script`)
+      scriptTag.setAttribute(`src`, BUNDLE_URL)
+      elements.push(scriptTag)
+
+      if (process.env.NODE_ENV === `production`) {
+        const styleTag = document.createElement(`link`)
+        styleTag.setAttribute(`rel`, `stylesheet`)
+        styleTag.setAttribute(`type`, `text/css`)
+        styleTag.setAttribute(`href`, `/assets/iframe.bundle.css`)
+        elements.push(styleTag)
+      }
+      const promises = elements.map(element => new Promise(res => element.onload = res))
+      elements.forEach(element => iframe.contentWindow.document.body.appendChild(element))
+      Promise.all(promises).then(resolve)
+    }
+  })
+  /* eslint-enable no-param-reassign */
+
   export default {
-    components: {
-      vcdComponentProxy,
-    },
     props: {
       code: {
         type: String,
         default: ``,
       },
     },
-    mounted() {
-      this.updateIframe()
-    },
-    methods: {
-      updateIframe() {
-        return new Promise((resolve) => {
-          const { iframe } = this.$refs
-          iframe.src = `about:blank`
-          iframe.onload = () => {
-            iframe.contentWindow.document.documentElement.innerHTML = `
-              <head></head>
-              <body>
-                <main id="main"></main>
-              </body>
-            `
-            const element = document.createElement(`script`)
-            element.setAttribute(`src`, BUNDLE_URL)
-            element.onload = () => {
-              resolve()
-            }
-            iframe.contentWindow.document.body.appendChild(element)
-          }
-        })
-      },
-    },
     watch: {
       code() {
-        this.updateIframe().then(() => {
-          const { iframe } = this.$refs
+        const { iframe } = this.$refs
+        prepareIframe(iframe).then(() => {
           const message = {
-            code: this.code,
+            parts: codeToParts(this.code),
             type: `codeUpdate`,
           }
           iframe.contentWindow.postMessage(message, `*`)

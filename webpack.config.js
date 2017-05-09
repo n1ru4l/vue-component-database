@@ -11,7 +11,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === `production`
 
 const extractStyles = new ExtractTextPlugin({
   disable: !IS_PRODUCTION,
-  filename: `main.css`,
+  filename: `[name].bundle.css`,
 })
 
 const definePlugin = new webpack.DefinePlugin({
@@ -64,6 +64,7 @@ const BASE_CONFIG = {
   resolve: {
     alias: {
       babel: `Babel`,
+      vue: `vue/dist/vue.esm.js`, // We need the template  compiler included build!
     },
     extensions: [
       `.webpack.js`,
@@ -101,7 +102,6 @@ if (IS_PRODUCTION) {
   )
 } else {
   BASE_CONFIG.devtool = `#cheap-module-eval-source-map`
-  BASE_CONFIG.resolve.alias.vue = `vue/dist/vue.js`
 
   const hotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin()
   BASE_CONFIG.plugins.push(hotModuleReplacementPlugin)
