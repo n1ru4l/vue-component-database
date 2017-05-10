@@ -18,7 +18,8 @@
     replaceECMAExportWithCJSExport
   } from '../../../lib/vue-parser'
 
-  const { Babel } = global
+//  const { Babel } = global
+  const Babel = require(`babel-standalone`)
 
   const transformCodeToEs5 = compose(
     replaceECMAExportWithCJSExport,

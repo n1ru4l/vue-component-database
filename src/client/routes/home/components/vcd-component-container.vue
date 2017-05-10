@@ -1,10 +1,10 @@
 <template>
   <div class="vcd-component-container">
     <template v-if="!componentId">
-      Please select a component.
+      <div class="vcd-component-container__message">Please select a component.</div>
     </template>
     <template v-else-if="isComponentLoading">
-      Loading component...
+      <div class="vcd-component-container__message">Loading component...</div>
     </template>
     <template v-else>
       <div class="vcd-component-container__upper">
@@ -110,6 +110,12 @@
     flex-grow: 1;
     display: flex;
     flex-flow: column;
+    justify-content: center;
+  }
+
+  .vcd-component-container__message {
+    align-self: center;
+    font-weight: 700;
   }
 
   .vcd-component-container__upper {
