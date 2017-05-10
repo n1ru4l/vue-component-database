@@ -18,7 +18,7 @@
       <mu-icon-button
         icon="save"
         :disabled="isSaveDisabled"
-        v-on:click="onSaveButtonClicked"
+        v-on:click="saveComponent"
       />
     </div>
     <cm-code-mirror
@@ -119,33 +119,10 @@
         toastMessage: `Saving component...`,
         toastTimeout: null,
         lastRefreshedCode: null,
+        timeoutAutoSaveDisabledTemporary: null,
       }
     },
-    created() {
-      this.currentCode = this.code
-      this.debounceCodeChanged = debounce(() => {
-        this.onCodeChanged(this.currentCode)
-      }, 500)
-      this.autoSave = debounce(() => {
-        this.onSaveButtonClicked()
-      }, 1000)
-      this.onCodeChanged(this.currentCode)
-    },
-    watch: {
-      code(newCode, oldCode) {
-        if (newCode === oldCode) return
-        this.currentCode = newCode
-        this.debounceCodeChanged()
-      },
-      currentCode() {
-        if (this.isAutoSaveEnabled) {
-          this.autoSave()
-          return
-        }
-        if (!this.isAutoUpdateEnabled) return
-        this.debounceCodeChanged()
-      },
-    },
+    // computed
     computed: {
       isSaveDisabled() {
         return this.code === this.currentCode
@@ -153,6 +130,21 @@
       isAutoSaveDisabled() {
         return this.currentUserId !== this.componentAuthorId
       },
+      isAutoSaveDisabledTemporary() {
+        return !!this.timeoutAutoSaveDisabledTemporary
+      },
+    },
+    // lifecycle
+    created() {
+      this.disableAutoSaveTemporary()
+      this.currentCode = this.code
+      this.debounceCodeChanged = debounce(() => {
+        this.onCodeChanged(this.currentCode)
+      }, 500)
+      this.autoSaveComponent = debounce(() => {
+        this.saveComponent()
+      }, 1000)
+      this.onCodeChanged(this.currentCode)
     },
     methods: {
       onAutoUpdateChanged(value) {
@@ -167,7 +159,7 @@
       onRefreshButtonClicked() {
         this.debounceCodeChanged()
       },
-      onSaveButtonClicked() {
+      saveComponent() {
         this.showSavingToast = true
         this.toastMessage = `Saving component...`
         const hideToast = () => {
@@ -189,6 +181,29 @@
           this.toastMessage = `Saving the component failed`
           hideToast()
         })
+      },
+      disableAutoSaveTemporary() {
+        if (this.timeoutAutoSaveDisabledTemporary) {
+          clearTimeout(this.timeoutAutoSaveDisabledTemporary)
+        }
+        this.timeoutAutoSaveDisabledTemporary = setTimeout(() => {
+          this.timeoutAutoSaveDisabledTemporary = null
+        }, 2000)
+      },
+    },
+    watch: {
+      code(newCode, oldCode) {
+        if (newCode === oldCode) return
+        this.currentCode = newCode
+        this.debounceCodeChanged()
+      },
+      currentCode() {
+        if (this.isAutoSaveEnabled && !this.isAutoSaveDisabledTemporary) {
+          this.autoSaveComponent()
+          return
+        }
+        if (!this.isAutoUpdateEnabled) return
+        this.debounceCodeChanged()
       },
     },
   }
