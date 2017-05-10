@@ -10,6 +10,7 @@
   "rules": {
     "semi": ["error", "never"],
     "quotes": ["error", "backtick"],
-    "array-bracket-spacing": ["error", "always"]
+    "array-bracket-spacing": ["error", "always"],
+    "sort-import": "off"
   }
 }
