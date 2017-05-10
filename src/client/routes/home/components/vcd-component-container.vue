@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-  import gql from 'graphql-tag'
+  import QUERY_ONE_COMPONENT_BY_ID from 'graphql-docs/queries/one-component-by-id.graphql'
   import Settings, {
     SETTING_IS_EDITOR_VISIBLE,
   } from '../../../services/settings'
@@ -47,20 +47,6 @@
   import vcdCodeEditor from './vcd-code-editor.vue'
   import vcdComponentToolbar from './vcd-component-toolbar.vue'
   import vcdComponentViewer from './vcd-component-viewer.vue'
-
-  const QUERY_ONE_COMPONENT_BY_ID = gql`
-    query OneComponentById($componentId: String!) {
-      component(id: $componentId) {
-        id
-        title
-        description
-        component
-        author {
-          id
-        }
-      }
-    }
-  `
 
   export default {
     components: {

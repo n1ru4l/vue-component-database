@@ -63,4 +63,4 @@ router.get(/(?:\/|$)/, async (ctx) => {
 
 app.use(bodyParser())
 app.use(router.routes())
-app.listen(4200)
+app.listen(process.env.APP_PORT, process.env.HOST_NAME)

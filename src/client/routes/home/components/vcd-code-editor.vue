@@ -34,31 +34,18 @@
   </div>
 </template>
 <script>
-  import gql from 'graphql-tag'
+  import MUTATION_UPDATE_COMPONENT_CONTENTS from 'graphql-docs/mutations/update-component-contents.graphql'
   import 'codemirror/mode/vue/vue'
-  import { debounce } from 'lodash'
-  import cmCodeMirror from 'vue-codemirror-lite/codemirror.vue'
-  import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
-  import muToast from 'muse-ui/src/toast/toast.vue'
-
   import Settings, {
     SETTING_IS_AUTO_UPDATE_ENABLED,
     SETTING_IS_AUTO_SAVE_ENABLED,
-  } from '../../../services/settings'
+  } from 'services/settings'
+  import { debounce } from 'lodash'
 
+  import cmCodeMirror from 'vue-codemirror-lite/codemirror.vue'
+  import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
   import vcdCodeEditorSettings from './vcd-code-editor-settings.vue'
-
-  const MUTATION_UPDATE_COMPONENT_CONTENTS = gql`
-    mutation updateComponentContents($componentId: String!, $contents: String!) {
-      updateComponent(
-        componentId: $componentId,
-        data: { component: $contents }
-      ) {
-        id
-        component
-      }
-    }
-  `
+  import muToast from 'muse-ui/src/toast/toast.vue'
 
   export default {
     components: {

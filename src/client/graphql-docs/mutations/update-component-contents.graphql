@@ -1,0 +1,9 @@
+mutation updateComponentContents($componentId: String!, $contents: String!) {
+  updateComponent(
+    componentId: $componentId,
+    data: { component: $contents }
+  ) {
+    id
+    component
+  }
+}

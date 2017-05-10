@@ -34,50 +34,15 @@
   </div>
 </template>
 <script>
-  import gql from 'graphql-tag'
-  import muFloatButton from 'muse-ui/src/floatButton'
+  import QUERY_ALL_COMPONENTS from 'graphql-docs/queries/all-components.graphql'
+  import MUTATION_CREATE_COMPONENT from 'graphql-docs/mutations/create-component.graphql'
+  import MUTATION_DELETE_COMPONENT from 'graphql-docs/mutations/delete-component.graphql'
 
+  import muFloatButton from 'muse-ui/src/floatButton'
   import vcdHeader from '../../../components/vcd-header.vue'
   import vcdComponentList from './vcd-component-list.vue'
   import vcdComponentContainer from './vcd-component-container.vue'
   import vcdComponentAdder from './vcd-component-adder.vue'
-
-  const QUERY_ALL_COMPONENTS = gql`
-    query allComponents {
-      components {
-        id
-        title
-        description
-        component
-        author {
-          id
-          login
-        }
-     }
-   }
-  `
-
-  const MUTATION_CREATE_COMPONENT = gql`
-    mutation createComponent($componentData: ComponentInput!) {
-      createComponent(component: $componentData) {
-        id
-        title
-        description
-        component
-        author {
-          id
-          login
-        }
-      }
-    }
-  `
-
-  const MUTATION_DELETE_COMPONENT = gql`
-    mutation deleteComponent($componentId: String!) {
-      deleteComponent(componentId: $componentId)
-    }
-  `
-
 
   export default {
     components: {

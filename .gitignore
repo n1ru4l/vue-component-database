@@ -4,4 +4,6 @@
 /database.sqlite3
 /.env
 /.idea
-.DS_STORE
+/.DS_STORE
+/graphql.schema.json
+/graphql.config.json

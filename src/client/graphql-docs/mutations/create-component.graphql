@@ -1,0 +1,12 @@
+mutation createComponent($componentData: ComponentInput!) {
+  createComponent(component: $componentData) {
+    id
+    title
+    description
+    component
+    author {
+      id
+      login
+    }
+  }
+}

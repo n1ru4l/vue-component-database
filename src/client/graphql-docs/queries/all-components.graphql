@@ -1,0 +1,12 @@
+query allComponents {
+  components {
+    id
+    title
+    description
+    component
+    author {
+      id
+      login
+    }
+  }
+}

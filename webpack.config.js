@@ -21,7 +21,7 @@ const definePlugin = new webpack.DefinePlugin({
   },
 })
 
-const BASE_CONFIG = {
+module.exports = {
   entry: {
     main: path.join(__dirname, `src`, `client`, `main.js`),
     iframe: path.join(__dirname, `src`, `client`, `iframe`, `index.js`),
@@ -59,6 +59,11 @@ const BASE_CONFIG = {
           use: [ `css-loader`, `less-loader` ],
         }),
       },
+      {
+        test: /\.(graphql)$/,
+        exclude: /node_modules/,
+        loader: `graphql-tag/loader`,
+      },
     ],
   },
   resolve: {
@@ -73,6 +78,10 @@ const BASE_CONFIG = {
       `.json`,
       `.vue`,
     ],
+    modules: [
+      `node_modules`,
+      `src/client`,
+    ],
   },
   plugins: [
     extractStyles,
@@ -81,9 +90,9 @@ const BASE_CONFIG = {
   devServer: {
     port: process.env.WEBPACK_DEV_PORT,
     headers: {
-      "Access-Control-Allow-Origin": `*`,
-      "Access-Control-Allow-Methods": `GET, POST, PUT, DELETE, PATCH, OPTIONS`,
-      "Access-Control-Allow-Headers": `X-Requested-With, content-type, Authorization`
+      'Access-Control-Allow-Origin': `*`,
+      'Access-Control-Allow-Methods': `GET, POST, PUT, DELETE, PATCH, OPTIONS`,
+      'Access-Control-Allow-Headers': `X-Requested-With, content-type, Authorization`
     },
   },
 }
@@ -95,16 +104,15 @@ if (IS_PRODUCTION) {
     analyzerMode: `static`,
     reportFilename: `bundle.info.html`,
   })
-  BASE_CONFIG.plugins.push(
+  module.exports.plugins.push(
     optimizeCssAssetsPlugin,
     uglifyJsPlugin,
     bundleAnalyzerPlugin
   )
 } else {
-  BASE_CONFIG.devtool = `#cheap-module-eval-source-map`
+  module.exports.devtool = `#cheap-module-eval-source-map`
 
   const hotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin()
-  BASE_CONFIG.plugins.push(hotModuleReplacementPlugin)
+  module.exports.plugins.push(hotModuleReplacementPlugin)
 }
 
-exports.default = BASE_CONFIG

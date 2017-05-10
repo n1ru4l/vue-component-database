@@ -1,0 +1,11 @@
+query OneComponentById($componentId: String!) {
+  component(id: $componentId) {
+    id
+    title
+    description
+    component
+    author {
+      id
+    }
+  }
+}

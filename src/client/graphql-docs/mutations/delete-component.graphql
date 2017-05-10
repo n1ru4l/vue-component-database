@@ -1,0 +1,3 @@
+mutation deleteComponent($componentId: String!) {
+  deleteComponent(componentId: $componentId)
+}

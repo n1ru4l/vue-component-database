@@ -75,7 +75,6 @@
       fileContents: null,
       title: ``,
       description: ``,
-      allowEscape: false, //@TODO: change how dialog communicates with Main component
     }),
     methods: {
       onSelectFile(ev) {
