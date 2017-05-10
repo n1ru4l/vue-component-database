@@ -1,6 +1,8 @@
 'use strict'
 
-const { property } = require(`lodash`)
+const {
+  property,
+} = require(`lodash`)
 
 module.exports = {
   Query: {
@@ -26,9 +28,17 @@ module.exports = {
       if (!user) throw new Error(`Must be authenticated.`)
       const { Components } = models
       const component = await Components.findWhereId(componentId)
-      if (!component) throw new Error(`Component not found`)
+      if (!component) throw new Error(`Component not found.`)
       if (component.author_id !== user.id) throw new Error(`Not allowed to delete this component`)
       return Components.deleteById(componentId)
+    },
+    async updateComponent(obj, { componentId, data }, { user, models }) {
+      if (!user) throw new Error(`Must be authenticated.`)
+      const { Components } = models
+      const component = await Components.findWhereId(componentId)
+      if (!component) throw new Error(`Component not found.`)
+      if (component.author_id !== user.id) throw new Error(`Not allowed to change this component`)
+      return Components.update(componentId, data)
     },
   },
   User: {

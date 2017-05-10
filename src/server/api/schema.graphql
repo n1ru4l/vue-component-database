@@ -22,10 +22,17 @@ type Component {
   author: User!
 }
 
+# Type for creating a new component
 input ComponentInput {
   title: String!
   description: String!
   component: String!
+}
+
+# Type for updating an existing component
+input ComponentUpdateInput {
+  description: String
+  component: String
 }
 
 # All things you can query for
@@ -39,9 +46,15 @@ type Query {
 }
 
 type Mutation {
+  # Create a component
   createComponent(component: ComponentInput!): Component!
   # Deletes a component and returns the id of the deleted component
   deleteComponent(componentId: String!): String
+  # Updates a component
+  updateComponent(
+    componentId: String!,
+    data: ComponentUpdateInput!
+  ): Component!
 }
 
 schema {

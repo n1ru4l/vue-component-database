@@ -22,6 +22,13 @@ class ComponentsModel {
     return component || null
   }
 
+  async update(id, data) {
+    await this.knex(`components`)
+      .update(data)
+      .where({ id })
+    return this.findWhereId(id)
+  }
+
   async create({
    title,
    description,
