@@ -22,15 +22,14 @@
 
     <vcd-component-container
       :componentId="$route.params.id"
-    >
-    </vcd-component-container>
+      :currentUserId="currentUserId"
+    />
     <template v-if="currentUser">
       <vcd-component-adder
         :show="isAddingNewComponent"
         :onCancel="onAdderCancel"
         :onCreate="onAdderCreate"
-      >
-      </vcd-component-adder>
+      />
     </template>
   </div>
 </template>
@@ -113,6 +112,11 @@
         isLoadingUser: 0,
         components: [],
       }
+    },
+    computed: {
+      currentUserId() {
+        return this.currentUser && this.currentUser.id
+      },
     },
     methods: {
       onAdderClicked() {

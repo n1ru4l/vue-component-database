@@ -12,6 +12,9 @@
           :code="component.component"
           :isVisible="isCodeEditorVisible"
           :onCodeChanged="onCodeChanged"
+          :currentUserId="currentUserId"
+          :componentAuthorId="componentAuthorId"
+          :componentId="componentId"
         />
         <vcd-component-viewer
           :code="code"
@@ -36,8 +39,11 @@
 </template>
 <script>
   import gql from 'graphql-tag'
-  import muIconButton from 'muse-ui/src/iconButton'
+  import Settings, {
+    SETTING_IS_EDITOR_VISIBLE,
+  } from '../../../services/settings'
 
+  import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
   import vcdCodeEditor from './vcd-code-editor.vue'
   import vcdComponentToolbar from './vcd-component-toolbar.vue'
   import vcdComponentViewer from './vcd-component-viewer.vue'
@@ -49,6 +55,9 @@
         title
         description
         component
+        author {
+          id
+        }
       }
     }
   `
@@ -81,12 +90,16 @@
         type: String,
         required: false,
       },
+      currentUserId: {
+        type: String,
+        required: false,
+      },
     },
     data: () => ({
       isComponentLoading: false,
       componentTagName: null,
       isGeneratingComponent: false,
-      isCodeEditorVisible: false,
+      isCodeEditorVisible: Settings.getBoolean(SETTING_IS_EDITOR_VISIBLE) || false,
       componentOptions: {},
       code: ``,
     }),
@@ -94,10 +107,14 @@
       hasComponent() {
         return !!this.component
       },
+      componentAuthorId() {
+        return this.component && this.component.author && this.component.author.id
+      },
     },
     methods: {
       toggleCodeEditorVisibility() {
         this.isCodeEditorVisible = !this.isCodeEditorVisible
+        Settings.setBoolean(SETTING_IS_EDITOR_VISIBLE, this.isCodeEditorVisible)
       },
       onCodeChanged(code) {
         this.code = code
