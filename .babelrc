@@ -7,7 +7,18 @@
     ["env", {
       "targets": {
         "uglify": true
-      }
+      },
+      "loose": true,
+      "modules": false
     }]
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        ["env", {
+          "modules": "commonjs"
+        }]
+      ]
+    }
+  }
 }
