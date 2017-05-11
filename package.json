@@ -12,7 +12,7 @@
     "build": "cross-env NODE_ENV=production webpack --config=webpack.config.js",
     "watch:be": "nodemon --config=nodemon.json",
     "watch:fe": "webpack-dev-server --config=webpack.config.js",
-    "lint": "eslint src --ext .js --ext .graphql",
+    "lint": "eslint src --ext .js --ext .graphql --ext .vue",
     "generate:schema": "apollo-codegen introspect-schema src/server/api/schema.graphqls",
     "test": "NODE_ENV=test jest"
   },

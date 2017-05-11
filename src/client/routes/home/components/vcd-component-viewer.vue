@@ -57,6 +57,7 @@
         styleTag.setAttribute(`href`, `/assets/iframe.bundle.css`)
         elements.push(styleTag)
       }
+      // eslint-disable-next-line no-return-assign
       const promises = elements.map(element => new Promise(res => element.onload = res))
       elements.forEach(element => iframe.contentWindow.document.body.appendChild(element))
       Promise.all(promises).then(resolve)

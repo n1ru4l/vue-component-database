@@ -25,6 +25,7 @@ module.exports = {
       'exports': `only-multiline`,
       'functions': `never`,
     }],
+    'import/first': `off`,
   },
   'settings': {
     'import/resolver': {
