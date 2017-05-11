@@ -51,6 +51,7 @@ describe(`getPartsFromDoc`, () => {
       templateDoc: templateContents,
       scriptDoc: scriptContents,
       styleDoc: styleContents,
+      isStyleScoped: false,
     }
 
     const result = getPartsFromDoc(doc)
@@ -74,6 +75,47 @@ describe(`getPartsFromDoc`, () => {
       templateDoc: null,
       scriptDoc: scriptContents,
       styleDoc: null,
+      isStyleScoped: false,
+    }
+    const result = getPartsFromDoc(doc)
+    expect(result).toEqual(expected)
+  })
+  it(`can parse scoped styles`, () => {
+    const templateContents = stripIndent`
+      <div class="burr">Hallo Welt {{test}}</div>
+    `
+    // language=JavaScript
+    const scriptContents = stripIndent`
+      modules.exports = {
+        data() {
+          return {
+            test: 31,
+          }
+        },
+      }
+    `
+    // language=CSS
+    const styleContents = stripIndent`
+        .burr {
+            color: red;
+        }
+    `
+    const doc = stripIndent`
+      <template>
+        ${templateContents}
+      </template>
+      <script>
+        ${scriptContents}
+      </script>
+      <style scoped>
+        ${styleContents}
+      </style>
+    `
+    const expected = {
+      templateDoc: templateContents,
+      scriptDoc: scriptContents,
+      styleDoc: styleContents,
+      isStyleScoped: true,
     }
     const result = getPartsFromDoc(doc)
     expect(result).toEqual(expected)

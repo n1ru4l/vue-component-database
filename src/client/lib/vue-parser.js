@@ -2,7 +2,7 @@ import { isRequired } from './util'
 
 const REGEX_PARSE_TEMPLATE = /<template>([\S\s]*)<\/template>/
 const REGEX_PARSE_SCRIPT = /<script>([\S\s]*)<\/script>/
-const REGEX_PARSE_STYLE = /<style>([\S\s]*)<\/style>/
+const REGEX_PARSE_STYLE = /<style( +scoped)?>([\S\s]*)<\/style>/
 const REGEX_REPLACE_ES_EXPORT_WITH_CJS_EXPORT = /(export[\n| *]*default[\n ]*{)/
 
 export function getPartsFromDoc(
@@ -14,7 +14,8 @@ export function getPartsFromDoc(
   return {
     templateDoc: templateResult ? (templateResult[1] || ``).trim() : null,
     scriptDoc: scriptResult ? (scriptResult[1] || ``).trim() : null,
-    styleDoc: styleResult ? (styleResult[1] || ``).trim() : null,
+    styleDoc: styleResult ? (styleResult[2] || ``).trim() : null,
+    isStyleScoped: !!styleResult && !!styleResult[1],
   }
 }
 
