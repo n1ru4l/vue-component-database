@@ -32,6 +32,8 @@
         const componentOptions = createVueComponentOptions(parts)
         this.componentOptions = componentOptions
         this.componentProperties = {} // @TODO: Implement component properties
+        // @TODO: Security
+        window.parent.postMessage({ type: `FINISHED_RENDER`, success: true }, `*`)
       },
     },
     mounted() {

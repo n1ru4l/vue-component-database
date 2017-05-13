@@ -6,6 +6,15 @@
       src="about:blank"
       ref="iframe"
     />
+    <div
+      v-if="isComponentGenerating"
+      class="vcd-component-viewer__overlay"
+    >
+      <mu-circular-progress
+        :size="60"
+        :strokeWidth="5"
+      />
+    </div>
   </div>
 </template>
 <script>
@@ -20,6 +29,7 @@
     compileRenderFunctionsFromTemplateDoc,
     scopeStyleDoc,
   } from 'lib/vue-parser'
+  import muCircularProgress from 'muse-ui/src/circularProgress/circularProgress.vue'
 
   const { Babel } = global
 //  const Babel = require(`babel-standalone`)
@@ -79,15 +89,27 @@
   /* eslint-enable no-param-reassign */
 
   export default {
+    components: {
+      muCircularProgress
+    },
     props: {
       code: {
         type: String,
         default: ``,
       },
     },
+    data: () => ({
+      isComponentGenerating: true,
+    }),
+    // lifecycle
+    created() {
+      window.addEventListener(`message`, this.onReceiverMessageFromIframe)
+    },
+
     watch: {
       code() {
         const { iframe } = this.$refs
+        this.isComponentGenerating = true
         prepareIframe(iframe).then(() => {
           const message = {
             parts: codeToParts(this.code),
@@ -97,6 +119,14 @@
         })
       },
     },
+    methods: {
+      onReceiverMessageFromIframe(ev) {
+        const { data } = ev
+        if (data.type === `FINISHED_RENDER` && data.success) {
+          this.isComponentGenerating = false
+        }
+      },
+    }
   }
 </script>
 <style>
@@ -110,5 +140,16 @@
     border: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .vcd-component-viewer__overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, .1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
