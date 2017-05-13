@@ -53,4 +53,8 @@
     padding-bottom: 0;
     overflow-y: scroll;
   }
+
+  .vcd-component-list > * {
+    width: inherit;
+  }
 </style>
