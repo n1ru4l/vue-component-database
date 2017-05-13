@@ -10,11 +10,20 @@ export function parseModule(
   return module
 }
 
+export function createFunctionFromCode(code = isRequired(`code`)) {
+  // eslint-disable-next-line no-eval
+  return eval(`(${code})`)
+}
+
 export function createVueComponentOptions({
   scriptDoc = isRequired(`script`),
-  templateDoc = null
+  renderOptions = null
 } = {}) {
   const { exports } = parseModule(scriptDoc)
-  if (templateDoc) exports.template = templateDoc
+  // eslint-disable-next-line no-eval
+  if (renderOptions) {
+    exports.render = createFunctionFromCode(renderOptions.render)
+    exports.staticRenderFns = (renderOptions.staticRenderFns || []).map(createFunctionFromCode)
+  }
   return exports
 }

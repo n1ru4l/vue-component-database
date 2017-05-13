@@ -89,7 +89,7 @@ describe(`createVueComponentOptions`, () => {
     const componentOptions = createVueComponentOptions({ scriptDoc })
     expect(toAst(componentOptions)).toEqual(toAst(expected))
   })
-  it(`considers templateDoc`, () => {
+  it(`considers renderOptions`, () => {
     // language=JavaScript
     const scriptDoc = stripIndent`
       module.exports = {
@@ -100,11 +100,33 @@ describe(`createVueComponentOptions`, () => {
         }
       }
     `
-    const templateDoc = stripIndent`
-      <div>Hallo Welt</div>
+    // language=JavaScript
+    const renderOptions = {
+      render: `function render (h) { return h('div') }`
+    }
+    const { render } = createVueComponentOptions({ scriptDoc, renderOptions })
+    expect(render).toBeInstanceOf(Function)
+  })
+  it(`ignores renderFunctionDoc if there is a render function in the scriptDoc`, () => {
+    // language=JavaScript
+    const scriptDoc = stripIndent`
+      module.exports = {
+        data: function data() {
+          return {
+            foo: 'bars'
+          }
+        },
+        render: function scurr(h) {
+          return h('div')
+        }
+      }
     `
-    const expected = templateDoc
-    const { template: result } = createVueComponentOptions({ scriptDoc, templateDoc })
-    expect(result).toEqual(expected)
+    // language=JavaScript
+    const renderFunctionDoc = stripIndent`
+      function render(h) { return h('span') }
+    `
+    const { render } = createVueComponentOptions({ scriptDoc, renderFunctionDoc })
+    const ast = toAst(render)
+    expect(ast.id.name).toEqual(`scurr`)
   })
 })

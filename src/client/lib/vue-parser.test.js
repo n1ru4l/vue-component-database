@@ -2,6 +2,8 @@ import { stripIndent } from 'common-tags'
 import {
   getPartsFromDoc,
   replaceECMAExportWithCJSExport,
+  compileRenderFunctionsFromTemplateDoc,
+  scopeStyleDoc,
 } from './vue-parser'
 
 describe(`getPartsFromDoc`, () => {
@@ -51,7 +53,7 @@ describe(`getPartsFromDoc`, () => {
       templateDoc: templateContents,
       scriptDoc: scriptContents,
       styleDoc: styleContents,
-      isStyleScoped: false,
+      scopedStyleDoc: null,
     }
 
     const result = getPartsFromDoc(doc)
@@ -75,7 +77,7 @@ describe(`getPartsFromDoc`, () => {
       templateDoc: null,
       scriptDoc: scriptContents,
       styleDoc: null,
-      isStyleScoped: false,
+      scopedStyleDoc: null,
     }
     const result = getPartsFromDoc(doc)
     expect(result).toEqual(expected)
@@ -114,8 +116,8 @@ describe(`getPartsFromDoc`, () => {
     const expected = {
       templateDoc: templateContents,
       scriptDoc: scriptContents,
-      styleDoc: styleContents,
-      isStyleScoped: true,
+      styleDoc: null,
+      scopedStyleDoc: styleContents,
     }
     const result = getPartsFromDoc(doc)
     expect(result).toEqual(expected)
@@ -182,7 +184,7 @@ describe(`replaceECMAExportWithCJSExport`, () => {
     const result = replaceECMAExportWithCJSExport(scriptDoc)
     expect(result).toEqual(expected)
   })
-  it(`considers linebreaks between 'export' 'default' and '{'`, () => {
+  it(`considers line breaks between 'export' 'default' and '{'`, () => {
     // language=JavaScript
     const scriptDoc = stripIndent`
       export
@@ -206,6 +208,57 @@ describe(`replaceECMAExportWithCJSExport`, () => {
       }
     `
     const result = replaceECMAExportWithCJSExport(scriptDoc)
+    expect(result).toEqual(expected)
+  })
+})
+
+describe(`compileRenderFunctionsFromTemplateDoc`, () => {
+  it(`exists`, () => {
+    expect(compileRenderFunctionsFromTemplateDoc).toBeDefined()
+  })
+  it(`is a function`, () => {
+    expect(compileRenderFunctionsFromTemplateDoc).toBeInstanceOf(Function)
+  })
+  it(`throws with missing templateDoc parameter`, () => {
+    expect(() => {
+      compileRenderFunctionsFromTemplateDoc()
+    }).toThrow(`templateDoc`)
+  })
+  it(`returns a renderOptions object`, () => {
+    const templateDoc = `<h1>Hello World</h1>`
+    const result = compileRenderFunctionsFromTemplateDoc(templateDoc)
+    expect(result).toMatchSnapshot()
+  })
+  it(`adds a attribute to a render function`, () => {
+    const templateDoc = `<h1>Hello World</h1>`
+    // language=JavaScript
+    const result = compileRenderFunctionsFromTemplateDoc(templateDoc, { attr: `data-v-scoped` })
+    expect(result).toMatchSnapshot()
+  })
+})
+describe(`scopeStyleDoc`, () => {
+  it(`exists`, () => {
+    expect(scopeStyleDoc).toBeDefined()
+  })
+  it(`is a function`, () => {
+    expect(scopeStyleDoc).toBeInstanceOf(Function)
+  })
+  it(`requires a styleDoc parameter`, () => {
+    expect(() => {
+      scopeStyleDoc()
+    }).toThrow(`styleDoc`)
+  })
+  it(`requires a attribute parameter`, () => {
+    const styleDoc = `.foo { color: red; }`
+    expect(() => {
+      scopeStyleDoc(styleDoc)
+    }).toThrow(`attribute`)
+  })
+  it(`scopes a style doc`, () => {
+    const styleDoc = `.foo { color: red; }`
+    const attribute = `data-lel-wut`
+    const expected = `.foo[data-lel-wut] { color: red; }`
+    const result = scopeStyleDoc(styleDoc, attribute)
     expect(result).toEqual(expected)
   })
 })

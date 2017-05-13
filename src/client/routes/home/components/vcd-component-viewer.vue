@@ -12,11 +12,14 @@
   import {
     flow as compose,
     update,
+    uniqueId,
   } from 'lodash'
   import {
     getPartsFromDoc,
-    replaceECMAExportWithCJSExport
-  } from '../../../lib/vue-parser'
+    replaceECMAExportWithCJSExport,
+    compileRenderFunctionsFromTemplateDoc,
+    scopeStyleDoc,
+  } from 'lib/vue-parser'
 
   const { Babel } = global
 //  const Babel = require(`babel-standalone`)
@@ -26,10 +29,20 @@
     code => Babel.transform(code, { presets: [ `es2015` ] }).code
   )
 
-  const codeToParts = compose(
+  const codeToParts = (doc, scopeAttr = uniqueId(`data-v-`)) => compose(
     getPartsFromDoc,
-    parts => update(parts, `scriptDoc`, transformCodeToEs5)
-  )
+    parts => update(parts, `scriptDoc`, transformCodeToEs5),
+    (parts) => {
+      if (parts.templateDoc) {
+        // eslint-disable-next-line no-param-reassign
+        parts.renderOptions = compileRenderFunctionsFromTemplateDoc(parts.templateDoc, {
+          attr: scopeAttr
+        })
+      }
+      return parts
+    },
+    parts => update(parts, `scopedStyleDoc`, styleDoc => styleDoc && scopeStyleDoc(styleDoc, scopeAttr))
+  )(doc)
 
   const BUNDLE_URL = (process.env.NODE_ENV === `production`)
     ? `/assets/iframe.bundle.js`

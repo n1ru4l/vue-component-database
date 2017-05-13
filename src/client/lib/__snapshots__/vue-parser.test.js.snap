@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compileRenderFunctionsFromTemplateDoc adds a attribute to a render function 1`] = `
+Object {
+  "render": "function render(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h1',{attrs:{\\"data-v-scoped\\":\\"\\"}},[_vm._v(\\"Hello World\\")])}",
+  "staticRenderFns": Array [],
+}
+`;
+
+exports[`compileRenderFunctionsFromTemplateDoc returns a renderOptions object 1`] = `
+Object {
+  "render": "function render(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h1',[_vm._v(\\"Hello World\\")])}",
+  "staticRenderFns": Array [],
+}
+`;

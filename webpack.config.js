@@ -36,7 +36,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: `babel-loader`,
-        exclude: /babel-standalone/,
+        exclude: [ /node_modules\/postcss/ ],
       },
       {
         test: /\.vue$/,

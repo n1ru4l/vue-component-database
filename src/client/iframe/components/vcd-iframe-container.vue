@@ -8,6 +8,12 @@
   import vcdComponentProxy from './vcd-component-proxy.vue'
   import { createVueComponentOptions } from '../../lib/vue-loader'
 
+  const addStyleDocToHead = (styleDoc) => {
+    const styleTagEl = document.createElement(`style`)
+    styleTagEl.innerHTML = styleDoc
+    document.head.appendChild(styleTagEl)
+  }
+
   export default {
     components: {
       vcdComponentProxy,
@@ -20,7 +26,10 @@
       handleMessage(event) {
         // @TODO: Security?
         if (event.data.type !== `codeUpdate`) return
-        const componentOptions = createVueComponentOptions(event.data.parts)
+        const { parts } = event.data
+        if (parts.styleDoc) addStyleDocToHead(parts.styleDoc)
+        if (parts.scopedStyleDoc) addStyleDocToHead(parts.scopedStyleDoc)
+        const componentOptions = createVueComponentOptions(parts)
         this.componentOptions = componentOptions
         this.componentProperties = {} // @TODO: Implement component properties
       },
