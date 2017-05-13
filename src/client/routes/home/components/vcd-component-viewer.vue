@@ -6,15 +6,17 @@
       src="about:blank"
       ref="iframe"
     />
-    <div
-      v-if="isComponentGenerating"
-      class="vcd-component-viewer__overlay"
-    >
-      <mu-circular-progress
-        :size="60"
-        :strokeWidth="5"
-      />
-    </div>
+    <transition name="fade">
+      <div
+        v-if="isComponentGenerating"
+        class="vcd-component-viewer__overlay"
+      >
+        <mu-circular-progress
+          :size="60"
+          :strokeWidth="5"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -129,7 +131,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .vcd-component-viewer {
     position: relative;
     display: flex;
@@ -151,5 +153,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity .3s
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0
   }
 </style>
