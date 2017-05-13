@@ -24,7 +24,8 @@
     <cm-code-mirror
       class="vcd-code-editor"
       :options="editorOptions"
-      v-model="currentCode"
+      :value="code"
+      v-on:change="onCodeMirrorChange"
       ref="leEditor"
     />
     <mu-toast
@@ -123,7 +124,6 @@
     },
     // lifecycle
     created() {
-      this.disableAutoSaveTemporary()
       this.currentCode = this.code
       this.debounceCodeChanged = debounce(() => {
         this.onCodeChanged(this.currentCode)
@@ -169,29 +169,11 @@
           hideToast()
         })
       },
-      disableAutoSaveTemporary() {
-        if (this.timeoutAutoSaveDisabledTemporary) {
-          clearTimeout(this.timeoutAutoSaveDisabledTemporary)
-        }
-        this.timeoutAutoSaveDisabledTemporary = setTimeout(() => {
-          this.timeoutAutoSaveDisabledTemporary = null
-        }, 2000)
-      },
-    },
-    watch: {
-      code(newCode, oldCode) {
-        if (newCode === oldCode) return
-        this.currentCode = newCode
-        this.debounceCodeChanged()
-      },
-      currentCode() {
-        if (this.isAutoSaveEnabled && !this.isAutoSaveDisabledTemporary) {
-          this.autoSaveComponent()
-          return
-        }
-        if (!this.isAutoUpdateEnabled) return
-        this.debounceCodeChanged()
-      },
+      onCodeMirrorChange(code) {
+        this.currentCode = code
+        if (this.isAutoUpdateEnabled) this.debounceCodeChanged()
+        if (this.isAutoSaveEnabled) this.autoSaveComponent()
+      }
     },
   }
 </script>
