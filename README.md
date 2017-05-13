@@ -1,8 +1,13 @@
 # Vue Component Database
 
+![Preview Image](./preview.jpg)
+
 A web application for sharing and editing vue single-file components.
 
-More info TBA ;)
+Features:
+- GitHub Authentication
+- Create and edit Vue Single File Components
+- Write ES2015 Code
 
 # Setup
 
@@ -54,4 +59,3 @@ yarn run generate:schema
 7. Lint the code (`yarn run lint`)
 
 48. Create a pull request :)
-
