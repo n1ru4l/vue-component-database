@@ -38,7 +38,7 @@
   import MUTATION_CREATE_COMPONENT from 'graphql-docs/mutations/create-component.graphql'
   import MUTATION_DELETE_COMPONENT from 'graphql-docs/mutations/delete-component.graphql'
 
-  import muFloatButton from 'muse-ui/src/floatButton'
+  import muFloatButton from 'muse-ui/src/floatButton/floatButton.vue'
   import vcdHeader from '../../../components/vcd-header.vue'
   import vcdComponentList from './vcd-component-list.vue'
   import vcdComponentContainer from './vcd-component-container.vue'

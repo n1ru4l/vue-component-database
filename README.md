@@ -19,7 +19,7 @@ yarn run build
 Copy `.env.example` to `.env` and adjust the environment variables.
 
 ```bash
-npm run start
+yarn run start
 ```
 
 # Development Stuff

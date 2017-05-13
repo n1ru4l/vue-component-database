@@ -20,7 +20,7 @@
   </mu-list>
 </template>
 <script>
-  import { list as muList } from 'muse-ui/src/list'
+  import muList from 'muse-ui/src/list/list.vue'
   import vcdComponentListItem from './vcd-component-list-item.vue'
 
   export default {

@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-  import muFloatButton from 'muse-ui/src/floatButton'
+  import muFloatButton from 'muse-ui/src/floatButton/floatButton.vue'
 
   /**
    * Might not work in IE

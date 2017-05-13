@@ -44,10 +44,10 @@
   </mu-dialog>
 </template>
 <script>
-  import muDialog from 'muse-ui/src/dialog'
-  import muTextField from 'muse-ui/src/textField'
-  import muFlatButton from 'muse-ui/src/flatButton'
-  import muRaisedButton from 'muse-ui/src/raisedButton'
+  import muDialog from 'muse-ui/src/dialog/dialog.vue'
+  import muTextField from 'muse-ui/src/textField/textField.vue'
+  import muFlatButton from 'muse-ui/src/flatButton/flatButton.vue'
+  import muRaisedButton from 'muse-ui/src/raisedButton/raisedButton.vue'
 
   export default {
     components: {

@@ -14,18 +14,8 @@
   </div>
 </template>
 <script>
-  import gql from 'graphql-tag'
+  import QUERY_USER_DATA from 'graphql-docs/queries/current-user.graphql'
   import vcdHeader from './vcd-header.vue'
-
-  const QUERY_USER_DATA = gql`
-    query currentUser {
-      currentUser {
-        id
-        login
-        avatarUrl
-      }
-    }
-  `
 
   export default {
     components: {

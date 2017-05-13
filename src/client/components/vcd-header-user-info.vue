@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-  import muAvatar from 'muse-ui/src/avatar'
+  import muAvatar from 'muse-ui/src/avatar/avatar.vue'
 
   export default {
     components: {

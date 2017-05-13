@@ -28,8 +28,8 @@
   </mu-app-bar>
 </template>
 <script>
-  import muAppBar from 'muse-ui/src/appBar'
-  import muIconButton from 'muse-ui/src/iconButton'
+  import muAppBar from 'muse-ui/src/appBar/appBar.vue'
+  import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
 
   import vcdHeaderLoginButton from './vcd-header-login-button.vue'
   import vcdHeaderUserInfo from './vcd-header-user-info.vue'

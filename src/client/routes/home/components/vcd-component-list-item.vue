@@ -1,10 +1,11 @@
 <template>
   <mu-list-item
     :to="attrHref"
+    :describeText="description"
   >
     <mu-icon slot="left" value="inbox"/>
     <span slot="title">{{authorLogin}} / <b>{{name}}</b></span>
-    <span slot="describe">{{ description }}</span>
+
     <mu-icon-button
       slot="right"
       icon="delete"
@@ -13,9 +14,9 @@
   </mu-list-item>
 </template>
 <script>
-  import { listItem as muListItem } from 'muse-ui/src/list'
-  import muIcon from 'muse-ui/src/icon'
-  import muIconButton from 'muse-ui/src/iconButton'
+  import muListItem from 'muse-ui/src/list/listItem.vue'
+  import muIcon from 'muse-ui/src/icon/icon.vue'
+  import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
 
   export default {
     components: {

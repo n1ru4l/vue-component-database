@@ -5,7 +5,7 @@
   />
 </template>
 <script>
-  import muIconButton from 'muse-ui/src/iconButton'
+  import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
   import Authenticator from '../services/authenticator'
 
   export default {

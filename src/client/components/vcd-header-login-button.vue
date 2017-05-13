@@ -17,7 +17,7 @@
   </mu-flat-button>
 </template>
 <script>
-  import muFlatButton from 'muse-ui/src/flatButton'
+  import muFlatButton from 'muse-ui/src/flatButton/flatButton.vue'
 
   const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${window.GITHUB_CLIENT_ID}&redirect_uri=http://localhost:4200/login`
 
