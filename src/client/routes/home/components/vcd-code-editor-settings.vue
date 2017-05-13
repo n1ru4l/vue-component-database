@@ -37,7 +37,7 @@
 </template>
 <script>
   import muIconMenu from 'muse-ui/src/iconMenu/iconMenu.vue'
-  import { menuItem as muMenuItem } from 'muse-ui/src/menu/menu.vue'
+  import muMenuItem from 'muse-ui/src/menu/menuItem.vue'
   import muSwitch from 'muse-ui/src/switch/switch.vue'
 
   export default {
