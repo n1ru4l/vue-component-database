@@ -2,6 +2,7 @@
   <mu-dialog
     :open="show"
     :title="dialogTitle"
+    v-if="show"
   >
     <p>
       Please consider:
@@ -15,7 +16,6 @@
         label="Title"
         v-model="title"
         fullWidth
-        v-focus-input="true"
       />
       <mu-text-field
         label="Description"
