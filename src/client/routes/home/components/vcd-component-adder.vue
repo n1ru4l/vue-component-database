@@ -1,7 +1,7 @@
 <template>
   <mu-dialog
     :open="show"
-    title="Add new component"
+    :title="dialogTitle"
   >
     <p>
       Please consider:
@@ -15,6 +15,7 @@
         label="Title"
         v-model="title"
         fullWidth
+        v-focus-input="true"
       />
       <mu-text-field
         label="Description"
@@ -22,32 +23,50 @@
         fullWidth
       />
       <mu-raised-button
-        label="Choose Single File COmponent (.vue)"
+        v-if="isUploadMode"
+        label="Choose Single File Component (.vue)"
       >
         <input
           type="file"
           class="file-button"
+          accept=".vue"
           @change="onSelectFile"
         >
       </mu-raised-button>
     </form>
     <mu-flat-button
       slot="actions"
-      @click="onCancel"
+      v-on:click="onCancel"
       label="Close"
     />
     <mu-flat-button
       slot="actions"
-      @click="onCreateClicked"
+      v-on:click="onCreateClicked"
       label="Create"
     />
   </mu-dialog>
 </template>
 <script>
+  import { stripIndent } from 'common-tags'
   import muDialog from 'muse-ui/src/dialog/dialog.vue'
   import muTextField from 'muse-ui/src/textField/textField.vue'
   import muFlatButton from 'muse-ui/src/flatButton/flatButton.vue'
   import muRaisedButton from 'muse-ui/src/raisedButton/raisedButton.vue'
+
+  const NEW_COMPONENT_TEMPLATE = stripIndent`
+    <template>
+      <div>Change me!</div>
+    </template>
+    <scr${``}ipt>
+      export default {
+
+      }
+    </sc${``}ript>
+    <style>
+
+    </style>
+
+  `
 
   export default {
     components: {
@@ -69,6 +88,10 @@
         type: Function,
         required: true,
       },
+      isUploadMode: {
+        type: Boolean,
+        default: false,
+      }
     },
     data: () => ({
       file: null,
@@ -93,7 +116,7 @@
         this.onCreate({
           title: this.title,
           description: this.description,
-          component: this.fileContents,
+          component: this.fileContents || NEW_COMPONENT_TEMPLATE,
         })
         this.title = ``
         this.description = ``
@@ -101,6 +124,9 @@
       },
     },
     computed: {
+      dialogTitle() {
+        return this.isUploadMode ? `Upload new component` : `Create new component`
+      },
       isFormInvalid() {
         if (!this.fileContents) {
           return true
@@ -116,7 +142,7 @@
   }
 </script>
 <style>
-  .file-button{
+  .file-button {
     position: absolute;
     left: 0;
     right: 0;

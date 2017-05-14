@@ -7,17 +7,28 @@
       <vcd-component-list
         :isLoading="isLoadingComponents"
         :components="components"
-        :onAdderClicked="onAdderClicked"
         :onDeleteListItemClicked="onDeleteComponent"
       >
       </vcd-component-list>
-      <mu-float-button
+      <vcd-speed-dial
         icon="add"
+        iconActive="close"
+        direction="left"
+        class="component-adder-button"
         secondary
         mini
-        class="component-adder-button"
-        v-on:click.native="onAdderClicked"
-      />
+      >
+        <mu-float-button
+          icon="insert_drive_file"
+          mini
+          v-on:click="onButtonCreateNewClicked"
+        />
+        <mu-float-button
+          icon="file_upload"
+          mini
+          v-on:click="onButtonUploadClicked"
+        />
+      </vcd-speed-dial>
     </div>
 
     <vcd-component-container
@@ -27,7 +38,8 @@
     <template v-if="currentUser">
       <vcd-component-adder
         :show="isAddingNewComponent"
-        :onCancel="onAdderCancel"
+        :isUploadMode="isUploadMode"
+        :onCancel="hideComponentAdder"
         :onCreate="onAdderCreate"
       />
     </template>
@@ -43,6 +55,7 @@
   import vcdComponentList from './vcd-component-list.vue'
   import vcdComponentContainer from './vcd-component-container.vue'
   import vcdComponentAdder from './vcd-component-adder.vue'
+  import vcdSpeedDial from 'components/vcd-speed-dial.vue'
 
   export default {
     components: {
@@ -51,6 +64,7 @@
       vcdComponentList,
       vcdComponentAdder,
       vcdComponentContainer,
+      vcdSpeedDial,
     },
     apollo: {
       components() {
@@ -76,6 +90,7 @@
         isLoadingComponents: 0,
         isLoadingUser: 0,
         components: [],
+        isUploadMode: false,
       }
     },
     computed: {
@@ -84,10 +99,10 @@
       },
     },
     methods: {
-      onAdderClicked() {
+      showComponentAdder() {
         this.isAddingNewComponent = true
       },
-      onAdderCancel() {
+      hideComponentAdder() {
         this.isAddingNewComponent = false
       },
       onAdderCreate(newComponentData) {
@@ -123,6 +138,14 @@
             },
           },
         })
+      },
+      onButtonUploadClicked() {
+        this.isUploadMode = true
+        this.showComponentAdder()
+      },
+      onButtonCreateNewClicked() {
+        this.isUploadMode = false
+        this.showComponentAdder()
       },
     },
   }
