@@ -5,12 +5,6 @@
   >
     <mu-icon slot="left" value="inbox"/>
     <span slot="title">{{authorLogin}} / <b>{{name}}</b></span>
-
-    <mu-icon-button
-      slot="right"
-      icon="delete"
-      v-on:click.native="onDeleteClicked(id, $event)"
-    />
   </mu-list-item>
 </template>
 <script>
@@ -39,10 +33,6 @@
       },
       authorLogin: {
         type: String,
-        required: true,
-      },
-      onDeleteClicked: {
-        type: Function,
         required: true,
       },
     },
