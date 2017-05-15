@@ -46,9 +46,9 @@ docker run -d -p 8080:8080 --env-file ./.env vue-component-database
 
 #### Github
 
-* First you will have to register a new OAuth application with GitHub ([Click here](https://github.com/settings/applications/new))! 
+First you will have to register a new OAuth application with GitHub ([Click here](https://github.com/settings/applications/new))! 
 
-* The `Hompage URL` must be equal to you `APP_HOST` variable. The `Authorization callback URL` must be equal to your `APP_HOST` variable + `/login` (e.g. http://localhost:8080/login)
+The `Hompage URL` must be equal to you `APP_HOST` variable. The `Authorization callback URL` must be equal to your `APP_HOST` variable + `/login` (e.g. http://localhost:8080/login)
 
 * `GITHUB_CLIENT_ID` The Client ID of your OAuth application (some random string)
 
