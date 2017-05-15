@@ -27,7 +27,7 @@
       class="vcd-code-editor"
       :options="editorOptions"
       :value="code"
-      v-on:change="onCodeMirrorChange"
+      v-on:input="onCodeMirrorChange"
       ref="leEditor"
     />
     <mu-toast
@@ -83,7 +83,7 @@
       muFlatButton,
     },
     props: {
-      onCodeChanged: {
+      updateCodePreview: {
         type: Function,
         required: true,
       },
@@ -151,13 +151,13 @@
     // lifecycle
     created() {
       this.currentCode = this.code
-      this.debounceCodeChanged = debounce(() => {
-        this.onCodeChanged(this.currentCode)
+      this.debounceUpdateCodePreview = debounce((code) => {
+        this.updateCodePreview(code)
       }, 500)
-      this.autoSaveComponent = debounce(() => {
+      this.debounceSaveComponent = debounce(() => {
         this.saveComponent()
       }, 1000)
-      this.onCodeChanged(this.currentCode)
+      this.updateCodePreview(this.currentCode)
     },
     methods: {
       onAutoUpdateChanged(value) {
@@ -223,10 +223,14 @@
       },
       onCodeMirrorChange(code) {
         this.currentCode = code
-        if (this.isAutoUpdateEnabled) this.debounceCodeChanged()
-        if (this.isAutoSaveEnabled) this.autoSaveComponent()
+        if (this.isAutoSaveEnabled) this.debounceSaveComponent()
       }
     },
+    watch: {
+      code(newCode) {
+        if (this.isAutoUpdateEnabled) this.updateCodePreview(newCode)
+      },
+    }
   }
 </script>
 <style>

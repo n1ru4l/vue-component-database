@@ -11,7 +11,7 @@
         <vcd-code-editor
           :code="component.component"
           :isVisible="isCodeEditorVisible"
-          :onCodeChanged="onCodeChanged"
+          :updateCodePreview="onCodeChanged"
           :currentUserId="currentUserId"
           :componentAuthorId="componentAuthorId"
           :componentId="componentId"
