@@ -1,11 +1,16 @@
 {
   "name": "vue-component-database",
+  "description": "A web app for editing and sharing vue components.",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "author": {
     "name": "Laurin Quast",
     "email": "laurinquast@googlemail.com"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/n1ru4l/vue-component-database.git"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./src/server/main.js",
