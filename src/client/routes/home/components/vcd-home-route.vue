@@ -10,6 +10,7 @@
       >
       </vcd-component-list>
       <vcd-speed-dial
+        v-if="currentUser"
         icon="add"
         iconActive="close"
         direction="left"
