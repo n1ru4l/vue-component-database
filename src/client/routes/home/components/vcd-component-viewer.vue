@@ -68,7 +68,7 @@
       `
       const elements = []
       const scriptTag = document.createElement(`script`)
-      scriptTag.setAttribute(`src`, process.env.IFRAME_BUNDLE_URL)
+      scriptTag.setAttribute(`src`, window.IFRAME_BUNDLE_URL)
       elements.push(scriptTag)
 
       if (process.env.NODE_ENV === `production`) {

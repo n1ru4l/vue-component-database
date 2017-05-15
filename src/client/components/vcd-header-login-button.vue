@@ -24,7 +24,7 @@
       muFlatButton,
     },
     data: () => ({
-      href: process.env.GITHUB_LOGIN_URL,
+      href: window.GITHUB_LOGIN_URL,
     }),
   }
 </script>
