@@ -13,7 +13,6 @@
         :description="component.description"
         :authorLogin="component.author.login"
         :id="component.id"
-        :onDeleteClicked="onDeleteListItemClicked"
       >
       </vcd-component-list-item>
     </template>
@@ -29,10 +28,6 @@
       vcdComponentListItem,
     },
     props: {
-      onDeleteListItemClicked: {
-        type: Function,
-        required: true,
-      },
       components: {
         type: Array,
         required: true,

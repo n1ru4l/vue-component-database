@@ -7,10 +7,10 @@
       <vcd-component-list
         :isLoading="isLoadingComponents"
         :components="components"
-        :onDeleteListItemClicked="onDeleteComponent"
       >
       </vcd-component-list>
       <vcd-speed-dial
+        v-if="currentUser"
         icon="add"
         iconActive="close"
         direction="left"
@@ -48,7 +48,6 @@
 <script>
   import QUERY_ALL_COMPONENTS from 'graphql-docs/queries/all-components.graphql'
   import MUTATION_CREATE_COMPONENT from 'graphql-docs/mutations/create-component.graphql'
-  import MUTATION_DELETE_COMPONENT from 'graphql-docs/mutations/delete-component.graphql'
 
   import muFloatButton from 'muse-ui/src/floatButton/floatButton.vue'
   import vcdHeader from '../../../components/vcd-header.vue'
@@ -118,25 +117,6 @@
           },
         }).then(() => {
           this.isAddingNewComponent = false
-        })
-      },
-      onDeleteComponent(componentId, ev) {
-        ev.preventDefault()
-        this.$router.push(`/`)
-        this.$apollo.mutate({
-          mutation: MUTATION_DELETE_COMPONENT,
-          variables: {
-            componentId,
-          },
-          updateQueries: {
-            allComponents: (prevResult, { mutationResult }) => {
-              const deletedComponentId = mutationResult.data.deleteComponent
-              const componentFilter = component => component.id !== deletedComponentId
-              return {
-                components: prevResult.components.filter(componentFilter),
-              }
-            },
-          },
         })
       },
       onButtonUploadClicked() {

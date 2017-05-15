@@ -2,6 +2,7 @@
   <mu-dialog
     :open="show"
     :title="dialogTitle"
+    v-on:close="onClose"
   >
     <p>
       Please consider:
@@ -15,7 +16,6 @@
         label="Title"
         v-model="title"
         fullWidth
-        v-focus-input="true"
       />
       <mu-text-field
         label="Description"
@@ -36,7 +36,7 @@
     </form>
     <mu-flat-button
       slot="actions"
-      v-on:click="onCancel"
+      v-on:click="onClose"
       label="Close"
     />
     <mu-flat-button
@@ -118,10 +118,17 @@
           description: this.description,
           component: this.fileContents || NEW_COMPONENT_TEMPLATE,
         })
+        this.resetData()
+      },
+      onClose() {
+        this.resetData()
+        this.onCancel()
+      },
+      resetData() {
         this.title = ``
         this.description = ``
         this.fileContents = ``
-      },
+      }
     },
     computed: {
       dialogTitle() {

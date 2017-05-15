@@ -10,6 +10,8 @@
         :isAutoSaveEnabled="isAutoSaveEnabled"
         :onAutoSaveChanged="onAutoSaveChanged"
         :isAutoSaveDisabled="isAutoSaveDisabled"
+        :onDeleteComponentClicked="showConfirmDeleteComponent"
+        :isDeleteEnabled="isCurrentUserTheComponentAuthor"
       />
       <mu-icon-button
         icon="refresh"
@@ -32,10 +34,31 @@
       v-if="showSavingToast"
       :message="toastMessage"
     />
+    <mu-dialog
+      title="Delete component"
+      :open="showDeleteComponentDialog"
+      v-on:close="hideConfirmDeleteComponent"
+    >
+      By confirming this dialog the component will be permanently deleted.
+      <mu-flat-button
+        slot="actions"
+        label="Confirm Delete"
+        v-on:click="deleteComponent"
+        labelPosition="before"
+        icon="delete_forever"
+      />
+      <mu-flat-button
+        slot="actions"
+        label="Abort"
+        primary
+        v-on:click="hideConfirmDeleteComponent"
+      />
+    </mu-dialog>
   </div>
 </template>
 <script>
   import MUTATION_UPDATE_COMPONENT_CONTENTS from 'graphql-docs/mutations/update-component-contents.graphql'
+  import MUTATION_DELETE_COMPONENT from 'graphql-docs/mutations/delete-component.graphql'
   import 'codemirror/mode/vue/vue'
   import Settings, {
     SETTING_IS_AUTO_UPDATE_ENABLED,
@@ -47,6 +70,8 @@
   import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
   import vcdCodeEditorSettings from './vcd-code-editor-settings.vue'
   import muToast from 'muse-ui/src/toast/toast.vue'
+  import muDialog from 'muse-ui/src/dialog/dialog.vue'
+  import muFlatButton from 'muse-ui/src/flatButton/flatButton.vue'
 
   export default {
     components: {
@@ -54,6 +79,8 @@
       vcdCodeEditorSettings,
       muIconButton,
       muToast,
+      muDialog,
+      muFlatButton,
     },
     props: {
       onCodeChanged: {
@@ -106,8 +133,7 @@
         showSavingToast: false,
         toastMessage: `Saving component...`,
         toastTimeout: null,
-        lastRefreshedCode: null,
-        timeoutAutoSaveDisabledTemporary: null,
+        showDeleteComponentDialog: false,
       }
     },
     // computed
@@ -115,12 +141,12 @@
       isSaveDisabled() {
         return this.code === this.currentCode
       },
+      isCurrentUserTheComponentAuthor() {
+        return this.currentUserId === this.componentAuthorId
+      },
       isAutoSaveDisabled() {
-        return this.currentUserId !== this.componentAuthorId
-      },
-      isAutoSaveDisabledTemporary() {
-        return !!this.timeoutAutoSaveDisabledTemporary
-      },
+        return !this.isCurrentUserTheComponentAuthor
+      }
     },
     // lifecycle
     created() {
@@ -167,6 +193,32 @@
         }).catch(() => {
           this.toastMessage = `Saving the component failed`
           hideToast()
+        })
+      },
+      showConfirmDeleteComponent() {
+        this.showDeleteComponentDialog = true
+      },
+      hideConfirmDeleteComponent() {
+        this.showDeleteComponentDialog = false
+      },
+      deleteComponent() {
+        this.hideConfirmDeleteComponent()
+        this.$apollo.mutate({
+          mutation: MUTATION_DELETE_COMPONENT,
+          variables: {
+            componentId: this.componentId,
+          },
+          updateQueries: {
+            allComponents: (prevResult, { mutationResult }) => {
+              const deletedComponentId = mutationResult.data.deleteComponent
+              const componentFilter = component => component.id !== deletedComponentId
+              return {
+                components: prevResult.components.filter(componentFilter),
+              }
+            },
+          },
+        }).then(() => {
+          this.$router.push(`/`)
         })
       },
       onCodeMirrorChange(code) {

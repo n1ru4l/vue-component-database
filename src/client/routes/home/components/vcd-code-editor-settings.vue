@@ -33,6 +33,13 @@
         />
       </template>
     </mu-menu-item>
+    <mu-menu-item
+      v-if="isDeleteEnabled"
+      class="vcd-code-editor-settings-item"
+      leftIcon="delete"
+      title="Delete"
+      v-on:click="onDeleteComponentClicked"
+    />
   </mu-icon-menu>
 </template>
 <script>
@@ -67,6 +74,14 @@
         type: Function,
         required: true,
       },
+      isDeleteEnabled: {
+        type: Boolean,
+        required: true,
+      },
+      onDeleteComponentClicked: {
+        type: Function,
+        required: true,
+      }
     },
     data: () => ({
       menuOrigins: {
