@@ -1,7 +1,7 @@
 /node_modules
 /build/*
 !/build/.gitkeep
-/database.sqlite3
+/*.sqlite3
 /.env
 /.idea
 /.DS_STORE
