@@ -48,11 +48,11 @@ docker run -d -p 8080:8080 --env-file ./.env vue-component-database
 
 First you will have to register a new OAuth application with GitHub ([Click here](https://github.com/settings/applications/new))! 
 
-The `Hompage URL` must be equal to you `APP_HOST` variable. The `Authorization callback URL` must be equal to your `APP_HOST` variable + `/login` (e.g. http://localhost:8080/login)
+The `Hompage URL` must be equal to you `APP_HOST` variable. The `Authorization callback URL` must be equal to your `APP_HOST` variable + `/login` (e.g. `http://localhost:8080/login`)
 
 * `GITHUB_CLIENT_ID` The Client ID of your OAuth application (some random string)
 
-* `GITHUB_CLIENT_SECRET` The Client Secret of your OAuth apllication (some more random string)
+* `GITHUB_CLIENT_SECRET` The Client Secret of your OAuth application (some more random string)
 
 #### Database
 
@@ -72,7 +72,7 @@ The `Hompage URL` must be equal to you `APP_HOST` variable. The `Authorization c
 
 #### Development Only
 
-* `WEBPACK_DEV_PORT` The port you want to run the webpack dev server (e.g. 4201)
+* `WEBPACK_DEV_PORT` The port you want to run the webpack dev server (e.g. `4201`)
 
 ## Development Stuff
 
