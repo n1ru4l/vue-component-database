@@ -51,9 +51,6 @@ router.get(/(?:\/|$)/, async (ctx) => {
       <body>
         <main id="main">
         </main>
-        <script>
-          window.GITHUB_CLIENT_ID = "${process.env.GITHUB_CLIENT_ID}"
-        </script>
         <script src="https://unpkg.com/babel-standalone@6.24.0/babel.min.js"></script>
         <script src="${BUNDLE_URL}"></script>
       </body>

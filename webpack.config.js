@@ -7,17 +7,25 @@ const webpack = require(`webpack`)
 const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
 const BundleAnalyzerPlugin = require(`webpack-bundle-analyzer`).BundleAnalyzerPlugin
 
-const IS_PRODUCTION = process.env.NODE_ENV === `production`
+const { env } = process
+const IS_PRODUCTION = env.NODE_ENV === `production`
 
 const extractStyles = new ExtractTextPlugin({
   disable: !IS_PRODUCTION,
   filename: `[name].bundle.css`,
 })
 
+const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${env.GITHUB_CLIENT_ID}&redirect_uri=${env.APP_HOST}/login`
+const IFRAME_BUNDLE_URL = IS_PRODUCTION
+  ? `/assets/iframe.bundle.js`
+  : `${env.APP_HOST}:${env.WEBPACK_DEV_PORT}/build/iframe.bundle.js`
+
 const definePlugin = new webpack.DefinePlugin({
   'process.env': {
     NODE_ENV: IS_PRODUCTION ? `'production'` : `'development'`,
-    WEBPACK_DEV_PORT: IS_PRODUCTION ? null : `'${process.env.WEBPACK_DEV_PORT}'`,
+    WEBPACK_DEV_PORT: IS_PRODUCTION ? null : `'${env.WEBPACK_DEV_PORT}'`,
+    GITHUB_LOGIN_URL: `'${GITHUB_LOGIN_URL}'`,
+    IFRAME_BUNDLE_URL: `'${IFRAME_BUNDLE_URL}'`,
   },
 })
 
@@ -88,7 +96,7 @@ module.exports = {
     definePlugin,
   ],
   devServer: {
-    port: process.env.WEBPACK_DEV_PORT,
+    port: env.WEBPACK_DEV_PORT,
     headers: {
       'Access-Control-Allow-Origin': `*`,
       'Access-Control-Allow-Methods': `GET, POST, PUT, DELETE, PATCH, OPTIONS`,
@@ -115,4 +123,3 @@ if (IS_PRODUCTION) {
   const hotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin()
   module.exports.plugins.push(hotModuleReplacementPlugin)
 }
-

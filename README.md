@@ -11,16 +11,23 @@ Features:
 
 # Setup
 
-```bash
-yarn install
-yarn run build
-```
+## Manual
 
 Copy `.env.example` to `.env` and adjust the environment variables.
 
 ```bash
+yarn install
+```
+
+```bash
+yarn run build
+yarn run migrate:db
 yarn run start
 ```
+
+## Docker
+
+Soon :)
 
 # Development Stuff
 

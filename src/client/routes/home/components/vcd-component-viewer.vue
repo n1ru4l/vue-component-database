@@ -56,10 +56,6 @@
     parts => update(parts, `scopedStyleDoc`, styleDoc => styleDoc && scopeStyleDoc(styleDoc, scopeAttr))
   )(doc)
 
-  const BUNDLE_URL = (process.env.NODE_ENV === `production`)
-    ? `/assets/iframe.bundle.js`
-    : `http://localhost:${process.env.WEBPACK_DEV_PORT}/build/iframe.bundle.js`
-
   /* eslint-disable no-param-reassign */
   const prepareIframe = iframe => new Promise((resolve) => {
     iframe.src = `about:blank`
@@ -72,7 +68,7 @@
       `
       const elements = []
       const scriptTag = document.createElement(`script`)
-      scriptTag.setAttribute(`src`, BUNDLE_URL)
+      scriptTag.setAttribute(`src`, process.env.IFRAME_BUNDLE_URL)
       elements.push(scriptTag)
 
       if (process.env.NODE_ENV === `production`) {
