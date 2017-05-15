@@ -31,7 +31,7 @@ class User {
       await this.knex(`users`).update({
         login: githubUser.login,
         avatar_url: githubUser.avatar_url,
-        last_token_check: Date.now(),
+        last_token_check: this.knex.fn.now(),
       }).where({ id: dbUser.id })
       return this.whereId(dbUser.id)
     }
@@ -44,7 +44,7 @@ class User {
       await this.knex(`users`).update({
         login: githubUser.login,
         avatar_url: githubUser.avatar_url,
-        last_token_check: Date.now(),
+        last_token_check: this.knex.fn.now(),
         access_token: accessToken,
       }).where({ id: dbUser.id })
       return this.whereId(dbUser.id)
@@ -75,7 +75,7 @@ class User {
       login,
       avatar_url: avatarUrl,
       access_token: accessToken,
-      last_token_check: Date.now(),
+      last_token_check: this.knex.fn.now(),
     }).returning(`id`)
     return this.whereId(userId)
   }
