@@ -1,0 +1,10 @@
+.env.sample
+.env
+.gitignore
+graphql.config.json
+graphql.schema.json
+database.sqlite3
+*.log
+node_modules
+build
+seeds

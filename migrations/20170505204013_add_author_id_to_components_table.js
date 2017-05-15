@@ -1,7 +1,8 @@
 'use strict'
 
 exports.up = ({ schema }) => schema.alterTable(`components`, (table) => {
-  table.integer(`author_id`)
+  table.integer(`author_id`, 11)
+    .unsigned()
     .references(`users.id`)
     .after(`component`)
 })
