@@ -38,6 +38,7 @@
     "koa-send": "^4.1.0",
     "lodash": "^4.17.4",
     "muse-ui": "^2.0.2",
+    "mysql": "^2.13.0",
     "postcss": "^6.0.1",
     "postcss-selector-parser": "^2.2.3",
     "scope-css": "^1.0.4",
