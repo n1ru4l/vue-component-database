@@ -2,6 +2,9 @@ FROM node:7.10.0-alpine
 
 MAINTAINER Laurin Quast <laurinquast@googlemail.com>
 
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
 RUN mkdir -p /usr/src/app
 RUN chown -R 1001:root /usr/src/app
 RUN mkdir /.npm
