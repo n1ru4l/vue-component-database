@@ -4,6 +4,10 @@ export const SETTING_IS_EDITOR_VISIBLE = `SETTING_IS_EDITOR_VISIBLE`
 export const SETTING_IS_AUTO_SAVE_ENABLED = `SETTING_IS_AUTO_SAVE_ENABLED`
 
 export default {
-  getBoolean: settingKey => localStorage.getItem(settingKey) === `1`,
+  getBoolean: (settingKey, defaultValue) => {
+    const value = localStorage.getItem(settingKey)
+    if (value == null) return defaultValue
+    return value === `1`
+  },
   setBoolean: (settingKey, value) => localStorage.setItem(settingKey, value ? `1` : `0`),
 }

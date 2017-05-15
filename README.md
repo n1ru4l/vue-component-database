@@ -40,9 +40,9 @@ docker run -d -p 8080:8080 --env-file ./.env vue-component-database
 
 #### General
 
-* `APP_PORT` Port of the app (eg. `8080`)
-
-* `APP_HOST` The full host of the app (e.g. `http://localhost:8080`)
+* `APP_URL` The full URL of the app (e.g. `http://localhost:8080`)
+* `APP_PORT` Port of the app (e.g. `8080`)
+* `APP_HOST` The host of the app (e.g. `localhost`)
 
 #### Github
 
@@ -73,12 +73,12 @@ The `Hompage URL` must be equal to you `APP_HOST` variable. The `Authorization c
 #### Development Only
 
 * `WEBPACK_DEV_PORT` The port you want to run the webpack dev server (e.g. `4201`)
+* `WEBPACK_DEV_URL` The full URL of the webpack dev server (e.g. `http://localhost:4201`)
+* `WEBPACK_DEV_HOST` The host of the webpack dev server (e.g. `localhost`)
 
 ## Development Stuff
 
-
 ### Running the tests
-
 
 Execute tests with:
 

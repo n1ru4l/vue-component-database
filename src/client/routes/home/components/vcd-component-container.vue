@@ -85,7 +85,7 @@
       isComponentLoading: false,
       componentTagName: null,
       isGeneratingComponent: false,
-      isCodeEditorVisible: Settings.getBoolean(SETTING_IS_EDITOR_VISIBLE) || false,
+      isCodeEditorVisible: Settings.getBoolean(SETTING_IS_EDITOR_VISIBLE, false),
       componentOptions: {},
       code: ``,
     }),

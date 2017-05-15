@@ -111,7 +111,7 @@
     },
     data() {
       const onSave = () => {
-        this.debounceCodeChanged()
+        this.updateCodePreview(this.currentCode)
         return false
       }
 
@@ -128,8 +128,8 @@
           },
         },
         currentCode: ``,
-        isAutoUpdateEnabled: Settings.getBoolean(SETTING_IS_AUTO_UPDATE_ENABLED) || true,
-        isAutoSaveEnabled: Settings.getBoolean(SETTING_IS_AUTO_SAVE_ENABLED) || false,
+        isAutoUpdateEnabled: Settings.getBoolean(SETTING_IS_AUTO_UPDATE_ENABLED, true),
+        isAutoSaveEnabled: Settings.getBoolean(SETTING_IS_AUTO_SAVE_ENABLED, false),
         showSavingToast: false,
         toastMessage: `Saving component...`,
         toastTimeout: null,
@@ -162,7 +162,7 @@
     methods: {
       onAutoUpdateChanged(value) {
         this.isAutoUpdateEnabled = value
-        if (value) this.debounceCodeChanged()
+        if (value) this.debounceUpdateCodePreview(this.currentCode)
         Settings.setBoolean(SETTING_IS_AUTO_UPDATE_ENABLED, value)
       },
       onAutoSaveChanged(value) {
@@ -170,7 +170,7 @@
         Settings.setBoolean(SETTING_IS_AUTO_SAVE_ENABLED, value)
       },
       onRefreshButtonClicked() {
-        this.debounceCodeChanged()
+        this.debounceUpdateCodePreview(this.code)
       },
       saveComponent() {
         this.showSavingToast = true
@@ -224,11 +224,13 @@
       onCodeMirrorChange(code) {
         this.currentCode = code
         if (this.isAutoSaveEnabled) this.debounceSaveComponent()
+        if (this.isAutoUpdateEnabled) this.debounceUpdateCodePreview(this.currentCode)
       }
     },
     watch: {
-      code(newCode) {
-        if (this.isAutoUpdateEnabled) this.updateCodePreview(newCode)
+      code(newCode, oldCode) {
+        if (newCode === oldCode) return
+        this.updateCodePreview(newCode)
       },
     }
   }

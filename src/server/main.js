@@ -36,11 +36,11 @@ router.get(`/login`, async (ctx) => {
 const { env } = process
 const BUNDLE_URL = (env.NODE_ENV === `production`)
   ? `/assets/main.bundle.js`
-  : `http://localhost:${env.WEBPACK_DEV_PORT}/build/main.bundle.js`
+  : `${env.WEBPACK_DEV_URL}/build/main.bundle.js`
 const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${env.GITHUB_CLIENT_ID}&redirect_uri=${env.APP_HOST}/login`
 const IFRAME_BUNDLE_URL = (env.NODE_ENV === `production`)
   ? `/assets/iframe.bundle.js`
-  : `${env.APP_HOST}:${env.WEBPACK_DEV_PORT}/build/iframe.bundle.js`
+  : `${env.WEBPACK_DEV_URL}/build/iframe.bundle.js`
 
 router.get(/(?:\/|$)/, async (ctx) => {
   // language=HTML
@@ -51,7 +51,7 @@ router.get(/(?:\/|$)/, async (ctx) => {
         <title>Vue.js Component Database</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        ${process.env.NODE_ENV === `production` ? `<link href="/assets/main.bundle.css" rel="stylesheet">` : ``}
+        ${env.NODE_ENV === `production` ? `<link href="/assets/main.bundle.css" rel="stylesheet">` : ``}
       </head>
       <body>
         <main id="main">
@@ -69,4 +69,4 @@ router.get(/(?:\/|$)/, async (ctx) => {
 
 app.use(bodyParser())
 app.use(router.routes())
-app.listen(process.env.APP_PORT, process.env.HOST_NAME)
+app.listen(env.APP_PORT, env.APP_HOST)
