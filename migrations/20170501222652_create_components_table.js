@@ -6,7 +6,7 @@ exports.up = ({ schema }) => schema.createTable(`components`, (table) => {
     .notNull()
   table.string(`description`)
     .notNull()
-  table.string(`component`)
+  table.text(`component`)
     .notNull()
   table.timestamps()
 })
