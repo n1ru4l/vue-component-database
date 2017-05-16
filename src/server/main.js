@@ -1,6 +1,7 @@
 'use strict'
 
 require(`dotenv`).config()
+const { env } = process
 
 const { stripIndent } = require(`common-tags`)
 
@@ -15,10 +16,13 @@ const requestGithubToken = require(`./lib/request-github-token`)
 const app = new Koa()
 const router = createKoaRouter()
 
+const ASSET_CACHE_MAX = 365 * 60 * 60
+
 router.get(/^\/assets(?:\/|$)/, async (ctx) => {
   const assetPath = ctx.path.replace(/assets\//, ``)
   await koaSend(ctx, assetPath, {
     root: `${__dirname}/../../build`,
+    maxAge: env.production ? ASSET_CACHE_MAX : 0,
   })
 })
 
@@ -33,7 +37,6 @@ router.get(`/login`, async (ctx) => {
   ctx.redirect(`/login-success?access_token=${accessToken}`)
 })
 
-const { env } = process
 const BUNDLE_URL = (env.NODE_ENV === `production`)
   ? `/assets/main.bundle.js`
   : `${env.WEBPACK_DEV_URL}/build/main.bundle.js`
