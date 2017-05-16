@@ -40,7 +40,7 @@ router.get(`/login`, async (ctx) => {
 const BUNDLE_URL = (env.NODE_ENV === `production`)
   ? `/assets/main.bundle.js`
   : `${env.WEBPACK_DEV_URL}/build/main.bundle.js`
-const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${env.GITHUB_CLIENT_ID}&redirect_uri=${env.APP_HOST}/login`
+const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${env.GITHUB_CLIENT_ID}&redirect_uri=${env.APP_URL}/login`
 const IFRAME_BUNDLE_URL = (env.NODE_ENV === `production`)
   ? `/assets/iframe.bundle.js`
   : `${env.WEBPACK_DEV_URL}/build/iframe.bundle.js`

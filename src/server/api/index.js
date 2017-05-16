@@ -18,8 +18,7 @@ function parseAccessToken(authHeader = null) {
 }
 
 const graphql = graphqlKoa(async (ctx) => {
-  const accessToken = parseAccessToken(ctx.request.headers.authorization)
-
+  const accessToken = ctx.cookies.get(`AUTH_TOKEN`) || parseAccessToken(ctx.request.headers.authorization)
   const githubConnector = new GithubConnector({ accessToken })
 
   const Users = new UsersModel({ githubConnector, knexConnector })
