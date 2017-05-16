@@ -22,7 +22,7 @@ router.get(/^\/assets(?:\/|$)/, async (ctx) => {
   const assetPath = ctx.path.replace(/assets\//, ``)
   await koaSend(ctx, assetPath, {
     root: `${__dirname}/../../build`,
-    maxAge: env.production ? ASSET_CACHE_MAX : 0,
+    maxAge: env.NODE_ENV === `production` ? ASSET_CACHE_MAX : 0,
   })
 })
 
