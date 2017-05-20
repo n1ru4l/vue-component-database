@@ -17,6 +17,10 @@
         />
       </div>
     </transition>
+    <vcd-error-log
+      v-if="errors.length"
+      :errors="errors"
+    />
   </div>
 </template>
 <script>
@@ -31,7 +35,10 @@
     compileRenderFunctionsFromTemplateDoc,
     scopeStyleDoc,
   } from 'lib/vue-parser'
+
   import muCircularProgress from 'muse-ui/src/circularProgress/circularProgress.vue'
+  import vcdErrorLog from './vcd-error-log.vue'
+
 
   const { Babel } = global
 //  const Babel = require(`babel-standalone`)
@@ -69,6 +76,7 @@
       const elements = []
       const scriptTag = document.createElement(`script`)
       scriptTag.setAttribute(`src`, window.IFRAME_BUNDLE_URL)
+      scriptTag.setAttribute(`crossorigin`, `anonymous`)
       elements.push(scriptTag)
 
       if (process.env.NODE_ENV === `production`) {
@@ -88,7 +96,8 @@
 
   export default {
     components: {
-      muCircularProgress
+      muCircularProgress,
+      vcdErrorLog,
     },
     props: {
       code: {
@@ -98,6 +107,7 @@
     },
     data: () => ({
       isComponentGenerating: true,
+      errors: [],
     }),
     // lifecycle
     created() {
@@ -108,9 +118,20 @@
       code() {
         const { iframe } = this.$refs
         this.isComponentGenerating = true
+        this.errors = []
+
+        let parts = null
+        try {
+          parts = codeToParts(this.code)
+        } catch (err) {
+          this.errors.push(err)
+          this.isComponentGenerating = false
+          return
+        }
+
         prepareIframe(iframe).then(() => {
           const message = {
-            parts: codeToParts(this.code),
+            parts,
             type: `codeUpdate`,
           }
           iframe.contentWindow.postMessage(message, `*`)
@@ -132,6 +153,7 @@
     position: relative;
     display: flex;
     flex-grow: 1;
+    flex-flow: column;
   }
 
   .vcd-component-viewer__iframe {
