@@ -8,7 +8,7 @@
       v-on:click="onMenuIconClicked"
     />
     <template v-if="isLoadingUser">
-      LOADING...
+      <span slot="right">LOADING...</span>
     </template>
     <template v-else-if="user">
       <vcd-header-user-info

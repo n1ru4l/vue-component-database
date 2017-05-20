@@ -30,7 +30,7 @@
       },
     },
     data: () => ({
-      isUserLoading: 0,
+      isLoadingUser: 0,
       currentUser: null,
       isSidebarActive: true,
     }),
