@@ -16,16 +16,13 @@
         direction="left"
         class="component-adder-button"
         secondary
-        mini
       >
         <mu-float-button
           icon="insert_drive_file"
-          mini
           v-on:click="onButtonCreateNewClicked"
         />
         <mu-float-button
           icon="file_upload"
-          mini
           v-on:click="onButtonUploadClicked"
         />
       </vcd-speed-dial>

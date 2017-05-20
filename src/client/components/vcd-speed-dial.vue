@@ -61,6 +61,7 @@
   .vcd-speed-dial {
     display: flex;
     flex-direction: column-reverse;
+    align-items: center;
     pointer-events: none;
   }
 
@@ -71,6 +72,7 @@
   .vcd-speed-dial > .vcd-speed-dial__trigger {
     pointer-events: all;
     z-index: 10;
+    margin-top: 5px;
   }
 
   .vcd-speed-dial > .vcd-speed-dial__trigger .mu-icon {

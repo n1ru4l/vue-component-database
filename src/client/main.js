@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import 'muse-ui/src/styles/base.less'
 
+
 import router from './router'
 import apolloProvider from './apollo-provider'
 
