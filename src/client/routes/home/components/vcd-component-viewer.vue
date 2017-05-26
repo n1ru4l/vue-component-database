@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+  import { transform } from 'babel-standalone'
   import {
     flow as compose,
     update,
@@ -40,13 +41,9 @@
   import muCircularProgress from 'muse-ui/src/circularProgress/circularProgress.vue'
   import vcdErrorLog from './vcd-error-log.vue'
 
-
-  const { Babel } = global
-//  const Babel = require(`babel-standalone`)
-
   const transformCodeToEs5 = compose(
     replaceECMAExportWithCJSExport,
-    code => Babel.transform(code, { presets: [ `es2015` ] }).code
+    code => transform(code, { presets: [ `es2015` ] }).code
   )
 
   const codeToParts = (doc, scopeAttr = uniqueId(`data-v-`)) => compose(

@@ -15,6 +15,7 @@
 </template>
 <script>
   import QUERY_USER_DATA from 'graphql-docs/queries/current-user.graphql'
+  import Settings, { SETTING_IS_SIDEBAR_ACTIVE } from 'services/settings'
   import vcdHeader from './vcd-header.vue'
 
   export default {
@@ -32,11 +33,12 @@
     data: () => ({
       isLoadingUser: 0,
       currentUser: null,
-      isSidebarActive: true,
+      isSidebarActive: Settings.getBoolean(SETTING_IS_SIDEBAR_ACTIVE, false),
     }),
     methods: {
       toggleIsSidebarActive() {
         this.isSidebarActive = !this.isSidebarActive
+        Settings.setBoolean(SETTING_IS_SIDEBAR_ACTIVE, this.isSidebarActive)
       },
     },
   }

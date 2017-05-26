@@ -263,7 +263,7 @@
   }
 
   .vcd-code-editor__buttons > * {
-    display: block;
+    display: block !important;
   }
 
   .vcd-code-editor__buttons .mu-icon-button {

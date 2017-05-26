@@ -85,24 +85,24 @@
       isComponentLoading: false,
       componentTagName: null,
       isGeneratingComponent: false,
-      isCodeEditorVisible: Settings.getBoolean(SETTING_IS_EDITOR_VISIBLE, false),
+      isCodeEditorVisible: Settings.getBoolean(SETTING_IS_EDITOR_VISIBLE, true),
       componentOptions: {},
       component: {
         component: stripIndent`
-          <temp${''}late>
+          <temp${``}late>
             <h2>Hello World</h2>
-          </temp${''}late>
-          <scr${''}ipt>
+          </temp${``}late>
+          <scr${``}ipt>
             // Vue Component Editor
             export default {
               data: () => ({}),
             }
-          </scr${''}ipt>
-          <sty${''}le>
+          </scr${``}ipt>
+          <sty${``}le>
             h2 {
               color: red;
             }
-          </sty${''}le>
+          </sty${``}le>
         `,
         title: `new-component`,
         description: `Some component description`,

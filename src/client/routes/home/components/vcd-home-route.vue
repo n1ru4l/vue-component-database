@@ -67,6 +67,9 @@
         return {
           query: QUERY_ALL_COMPONENTS,
           loadingKey: `isLoadingComponents`,
+          skip() {
+            return !this.isSidebarActive
+          },
         }
       },
     },

@@ -88,11 +88,9 @@ module.exports = {
   },
   externals: {
     vue: `Vue`,
+    'babel-standalone': `Babel`,
   },
   resolve: {
-    alias: {
-      babel: `Babel`,
-    },
     extensions: [
       `.webpack.js`,
       `.web.js`,
@@ -133,14 +131,19 @@ if (IS_PRODUCTION) {
     cacheId: `vue-component-database`,
     filename: `service-worker.js`,
     maximumFileSizeToCacheInBytes: 4194304,
-    // minify: true,
+    minify: true,
     navigateFallback: `/index.html`,
+    navigateFallbackWhitelist: [
+      /^(?!\/login)/,
+    ],
     // navigateFallbackWhitelist: [],
     stripPrefix: `build/`,
     staticFileGlobs: [
       `build/index.html`,
-      `build/*.css`,
-      `build/*.js`,
+      `build/iframe.bundle.css`,
+      `build/iframe.bundle.js`,
+      `build/main.bundle.css`,
+      `build/main.bundle.js`,
     ],
     runtimeCaching: [
       {
@@ -155,6 +158,10 @@ if (IS_PRODUCTION) {
         urlPattern: /https:\/\/[\w]*.githubusercontent.com/,
         handler: `cacheFirst`,
       },
+      {
+        urlPattern: /login/,
+        handler: `networkFirst`,
+      }
     ],
   })
   module.exports.plugins.push(
