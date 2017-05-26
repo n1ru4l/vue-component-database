@@ -14,7 +14,7 @@
           :componentId="componentId"
         />
         <vcd-component-viewer
-          :code="code"
+          ref="componentViewer"
         >
           <div
             class="vcd-icon-bar"
@@ -124,6 +124,9 @@
       },
       onCodeChanged(code) {
         this.code = code
+        const { componentViewer } = this.$refs
+        if (!componentViewer) return
+        componentViewer.updateIframe(code)
       },
     },
   }

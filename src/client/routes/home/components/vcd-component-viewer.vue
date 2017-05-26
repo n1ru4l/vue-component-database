@@ -103,12 +103,6 @@
       muCircularProgress,
       vcdErrorLog,
     },
-    props: {
-      code: {
-        type: String,
-        default: ``,
-      },
-    },
     data: () => ({
       isComponentGenerating: true,
       errors: [],
@@ -117,16 +111,21 @@
     created() {
       window.addEventListener(`message`, this.onReceiverMessageFromIframe)
     },
-
-    watch: {
-      code() {
+    methods: {
+      onReceiverMessageFromIframe(ev) {
+        const { data } = ev
+        if (data.type === `FINISHED_RENDER` && data.success) {
+          this.isComponentGenerating = false
+        }
+      },
+      updateIframe(code) {
         const { iframe } = this.$refs
         this.isComponentGenerating = true
         this.errors = []
 
         let parts = null
         try {
-          parts = codeToParts(this.code)
+          parts = codeToParts(code)
         } catch (err) {
           this.errors.push(err)
           this.isComponentGenerating = false
@@ -140,15 +139,7 @@
           }
           iframe.contentWindow.postMessage(message, `*`)
         })
-      },
-    },
-    methods: {
-      onReceiverMessageFromIframe(ev) {
-        const { data } = ev
-        if (data.type === `FINISHED_RENDER` && data.success) {
-          this.isComponentGenerating = false
-        }
-      },
+      }
     }
   }
 </script>
