@@ -118,8 +118,10 @@
       },
     },
     // lifecycle
-    updated() {
-      this.onCodeChanged(this.component.component)
+    watch: {
+      component() {
+        this.onCodeChanged(this.component.component)
+      }
     },
     methods: {
       toggleCodeEditorVisibility() {
