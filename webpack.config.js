@@ -6,6 +6,8 @@ const ExtractTextPlugin = require(`extract-text-webpack-plugin`)
 const webpack = require(`webpack`)
 const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
 const BundleAnalyzerPlugin = require(`webpack-bundle-analyzer`).BundleAnalyzerPlugin
+const CopyWebpackPlugin = require(`copy-webpack-plugin`)
+const SWPrecacheWebpackPlugin = require(`sw-precache-webpack-plugin`)
 
 const { env } = process
 const IS_PRODUCTION = env.NODE_ENV === `production`
@@ -31,18 +33,36 @@ module.exports = {
     filename: `[name].bundle.js`,
     publicPath: `/build/`,
   },
+  context: path.join(__dirname, `src`, `client`),
   module: {
     rules: [
       {
         test: /\.js$/,
         loader: `babel-loader`,
-        exclude: [ /node_modules\/postcss/ ],
+        include: [
+          /node_modules\/muse-ui/,
+          /src\/client/,
+        ],
       },
       {
         test: /\.vue$/,
         loader: `vue-loader`,
         options: {
           extractCSS: IS_PRODUCTION,
+          loaders: {
+            less: [
+              `vue-style-loader`,
+              `css-loader`,
+              {
+                loader: `less-loader`,
+                options: {
+                  globalVars: {
+                    theme: `teal`,
+                  },
+                },
+              },
+            ],
+          }
         },
       },
       {
@@ -66,10 +86,12 @@ module.exports = {
       },
     ],
   },
+  externals: {
+    vue: `Vue`,
+  },
   resolve: {
     alias: {
       babel: `Babel`,
-      vue: `vue/dist/vue.esm.js`, // We need the template  compiler included build!
     },
     extensions: [
       `.webpack.js`,
@@ -104,10 +126,43 @@ if (IS_PRODUCTION) {
     analyzerMode: `static`,
     reportFilename: `bundle.info.html`,
   })
+  const copyPlugin = new CopyWebpackPlugin([
+    { from: `index.html` }
+  ])
+  const precachePlugin = new SWPrecacheWebpackPlugin({
+    cacheId: `vue-component-database`,
+    filename: `service-worker.js`,
+    maximumFileSizeToCacheInBytes: 4194304,
+    // minify: true,
+    navigateFallback: `/index.html`,
+    // navigateFallbackWhitelist: [],
+    stripPrefix: `build/`,
+    staticFileGlobs: [
+      `build/index.html`,
+      `build/*.css`,
+      `build/*.js`,
+    ],
+    runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/unpkg.com/,
+        handler: `cacheFirst`,
+      },
+      {
+        urlPattern: /^https:\/\/fonts.googleapis.com/,
+        handler: `cacheFirst`,
+      },
+      {
+        urlPattern: /https:\/\/[\w]*.githubusercontent.com/,
+        handler: `cacheFirst`,
+      },
+    ],
+  })
   module.exports.plugins.push(
     optimizeCssAssetsPlugin,
     uglifyJsPlugin,
-    bundleAnalyzerPlugin
+    bundleAnalyzerPlugin,
+    copyPlugin,
+    precachePlugin
   )
 } else {
   module.exports.devtool = `#cheap-module-eval-source-map`

@@ -1,9 +1,6 @@
 <template>
   <div class="vcd-component-container">
-    <template v-if="!componentId">
-      <div class="vcd-component-container__message">Please select a component.</div>
-    </template>
-    <template v-else-if="isComponentLoading">
+    <template v-if="isComponentLoading">
       <div class="vcd-component-container__message">Loading component...</div>
     </template>
     <template v-else>
@@ -32,7 +29,8 @@
         </vcd-component-viewer>
       </div>
       <vcd-component-toolbar
-        :component="component"
+        :title="component.title"
+        :description="component.description"
       />
     </template>
   </div>
@@ -42,6 +40,8 @@
   import Settings, {
     SETTING_IS_EDITOR_VISIBLE,
   } from '../../../services/settings'
+
+  import { stripIndent } from 'common-tags'
 
   import muIconButton from 'muse-ui/src/iconButton/iconButton.vue'
   import vcdCodeEditor from './vcd-code-editor.vue'
@@ -87,6 +87,26 @@
       isGeneratingComponent: false,
       isCodeEditorVisible: Settings.getBoolean(SETTING_IS_EDITOR_VISIBLE, false),
       componentOptions: {},
+      component: {
+        component: stripIndent`
+          <temp${''}late>
+            <h2>Hello World</h2>
+          </temp${''}late>
+          <scr${''}ipt>
+            // Vue Component Editor
+            export default {
+              data: () => ({}),
+            }
+          </scr${''}ipt>
+          <sty${''}le>
+            h2 {
+              color: red;
+            }
+          </sty${''}le>
+        `,
+        title: `new-component`,
+        description: `Some component description`,
+      },
       code: ``,
     }),
     computed: {

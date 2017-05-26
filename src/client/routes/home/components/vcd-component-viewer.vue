@@ -2,6 +2,7 @@
   <div class="vcd-component-viewer">
     <slot name="buttons"/>
     <iframe
+      sandbox="allow-same-origin allow-scripts"
       class="vcd-component-viewer__iframe"
       src="about:blank"
       ref="iframe"
@@ -63,6 +64,16 @@
     parts => update(parts, `scopedStyleDoc`, styleDoc => styleDoc && scopeStyleDoc(styleDoc, scopeAttr))
   )(doc)
 
+  const scriptSources = [
+    `https://unpkg.com/vue@2.3.3/dist/vue.js`,
+    window.IFRAME_BUNDLE_URL,
+  ]
+  const createScriptTag = (src) => {
+    const scriptTag = document.createElement(`script`)
+    scriptTag.setAttribute(`src`, src)
+    return scriptTag
+  }
+
   /* eslint-disable no-param-reassign */
   const prepareIframe = iframe => new Promise((resolve) => {
     iframe.src = `about:blank`
@@ -73,23 +84,19 @@
           <main id="main"></main>
         </body>
       `
-      const elements = []
-      const scriptTag = document.createElement(`script`)
-      scriptTag.setAttribute(`src`, window.IFRAME_BUNDLE_URL)
-      scriptTag.setAttribute(`crossorigin`, `anonymous`)
-      elements.push(scriptTag)
+      const elements = scriptSources.map(createScriptTag)
 
       if (process.env.NODE_ENV === `production`) {
         const styleTag = document.createElement(`link`)
         styleTag.setAttribute(`rel`, `stylesheet`)
         styleTag.setAttribute(`type`, `text/css`)
-        styleTag.setAttribute(`href`, `/assets/iframe.bundle.css`)
+        styleTag.setAttribute(`href`, `/iframe.bundle.css`)
         elements.push(styleTag)
       }
-      // eslint-disable-next-line no-return-assign
-      const promises = elements.map(element => new Promise(res => element.onload = res))
-      elements.forEach(element => iframe.contentWindow.document.body.appendChild(element))
-      Promise.all(promises).then(resolve)
+      elements.reduce((promise, element) => promise.then(() => new Promise((res) => {
+        element.onload = res
+        iframe.contentWindow.document.body.appendChild(element)
+      })), Promise.resolve()).then(resolve)
     }
   })
   /* eslint-enable no-param-reassign */

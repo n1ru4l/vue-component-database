@@ -1,8 +1,6 @@
 import Vue from 'vue'
-import 'muse-ui/src/styles/base.less'
-
-
 import router from './router'
+import 'muse-ui/src/styles/base.less'
 import apolloProvider from './apollo-provider'
 
 import vcdMainComponent from './components/vcd-main-component.vue'
@@ -15,3 +13,7 @@ new RootComponent({
   router,
   apolloProvider,
 })
+
+if (`serviceWorker` in navigator) {
+  navigator.serviceWorker.register(`/service-worker.js`)
+}
