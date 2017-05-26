@@ -117,6 +117,10 @@
         return this.component && this.component.author && this.component.author.id
       },
     },
+    // lifecycle
+    updated() {
+      this.onCodeChanged(this.component.component)
+    },
     methods: {
       toggleCodeEditorVisibility() {
         this.isCodeEditorVisible = !this.isCodeEditorVisible
