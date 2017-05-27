@@ -19,10 +19,14 @@ const router = createKoaRouter()
 const ASSET_CACHE_MAX = 365 * 60 * 60
 
 router.get(/\/[a-zA-Z.-]*\.(js|css)/, async (ctx) => {
-  await koaSend(ctx, ctx.path, {
-    root: `${__dirname}/../../build/`,
-    maxAge: env.NODE_ENV === `production` ? ASSET_CACHE_MAX : 0,
-  })
+  try {
+    await koaSend(ctx, ctx.path, {
+      root: `${__dirname}/../../build/`,
+      maxAge: env.NODE_ENV === `production` ? ASSET_CACHE_MAX : 0,
+    })
+  } catch (err) {
+    ctx.throw(404)
+  }
 })
 
 router.post(`/graphql`, graphql)
