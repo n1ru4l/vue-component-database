@@ -8,6 +8,8 @@ const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
 const BundleAnalyzerPlugin = require(`webpack-bundle-analyzer`).BundleAnalyzerPlugin
 const CopyWebpackPlugin = require(`copy-webpack-plugin`)
 const SWPrecacheWebpackPlugin = require(`sw-precache-webpack-plugin`)
+const HardSourceWebpackPlugin = require(`hard-source-webpack-plugin`)
+const objectHash = require(`node-object-hash`)()
 
 const { env } = process
 const IS_PRODUCTION = env.NODE_ENV === `production`
@@ -20,6 +22,60 @@ const extractStyles = new ExtractTextPlugin({
 const definePlugin = new webpack.DefinePlugin({
   'process.env': {
     NODE_ENV: IS_PRODUCTION ? `'production'` : `'development'`,
+  },
+})
+
+const serviceWorkerPlugin = new SWPrecacheWebpackPlugin({
+  cacheId: `vue-component-database`,
+  filename: `service-worker.js`,
+  maximumFileSizeToCacheInBytes: 4194304,
+  minify: true,
+  navigateFallback: `/index.html`,
+  navigateFallbackWhitelist: [
+    /^(?!\/login)/,
+    /^(?!\/graphql)/,
+  ],
+  // navigateFallbackWhitelist: [],
+  stripPrefix: `build/`,
+  staticFileGlobs: [
+    `build/index.html`,
+    `build/iframe.bundle.css`,
+    `build/iframe.bundle.js`,
+    `build/main.bundle.css`,
+    `build/main.bundle.js`,
+  ],
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/unpkg.com/,
+      handler: `cacheFirst`,
+    },
+    {
+      urlPattern: /^https:\/\/fonts.googleapis.com/,
+      handler: `cacheFirst`,
+    },
+    {
+      urlPattern: /https:\/\/[\w]*.githubusercontent.com/,
+      handler: `cacheFirst`,
+    },
+    {
+      urlPattern: /login/,
+      handler: `networkFirst`,
+    },
+  ],
+})
+
+const copyPlugin = new CopyWebpackPlugin([
+  { from: `index.html` }
+])
+
+const hardSourceWebpackPlugin = new HardSourceWebpackPlugin({
+  cacheDirectory: path.resolve(__dirname, `node_modules`, `.webpack-cache`, `[confighash]`),
+  recordsPath: path.resolve(__dirname, `node_modules`, `.webpack-cache`, `[confighash]`, `records.json`),
+  configHash: config => objectHash.hash(config),
+  environmentHash: {
+    root: process.cwd(),
+    directories: [ `node_modules` ],
+    files: [ `package.json` ],
   },
 })
 
@@ -104,8 +160,11 @@ module.exports = {
     ],
   },
   plugins: [
+    hardSourceWebpackPlugin,
     extractStyles,
     definePlugin,
+    copyPlugin,
+    serviceWorkerPlugin,
   ],
   devServer: {
     port: env.WEBPACK_DEV_PORT,
@@ -124,56 +183,18 @@ if (IS_PRODUCTION) {
     analyzerMode: `static`,
     reportFilename: `bundle.info.html`,
   })
-  const copyPlugin = new CopyWebpackPlugin([
-    { from: `index.html` }
-  ])
-  const precachePlugin = new SWPrecacheWebpackPlugin({
-    cacheId: `vue-component-database`,
-    filename: `service-worker.js`,
-    maximumFileSizeToCacheInBytes: 4194304,
-    minify: true,
-    navigateFallback: `/index.html`,
-    navigateFallbackWhitelist: [
-      /^(?!\/login)/,
-    ],
-    // navigateFallbackWhitelist: [],
-    stripPrefix: `build/`,
-    staticFileGlobs: [
-      `build/index.html`,
-      `build/iframe.bundle.css`,
-      `build/iframe.bundle.js`,
-      `build/main.bundle.css`,
-      `build/main.bundle.js`,
-    ],
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/unpkg.com/,
-        handler: `cacheFirst`,
-      },
-      {
-        urlPattern: /^https:\/\/fonts.googleapis.com/,
-        handler: `cacheFirst`,
-      },
-      {
-        urlPattern: /https:\/\/[\w]*.githubusercontent.com/,
-        handler: `cacheFirst`,
-      },
-      {
-        urlPattern: /login/,
-        handler: `networkFirst`,
-      }
-    ],
-  })
+
   module.exports.plugins.push(
     optimizeCssAssetsPlugin,
     uglifyJsPlugin,
-    bundleAnalyzerPlugin,
-    copyPlugin,
-    precachePlugin
+    bundleAnalyzerPlugin
   )
 } else {
   module.exports.devtool = `#cheap-module-eval-source-map`
 
   const hotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin()
-  module.exports.plugins.push(hotModuleReplacementPlugin)
+
+  module.exports.plugins.push(
+    hotModuleReplacementPlugin
+  )
 }

@@ -189,6 +189,14 @@
             componentId: this.componentId,
             contents: this.currentCode,
           },
+//          optimisticResponse: {
+//            __typename: `Mutation`,
+//            updateComponent: {
+//              __typename: `Component`,
+//              id: this.componentId,
+//              component: this.currentCode,
+//            }
+//          },
         }).then(() => {
           this.toastMessage = `Saved component successfully.`
           hideToast()
