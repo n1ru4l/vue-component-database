@@ -8,9 +8,10 @@
       "targets": {
         "uglify": true
       },
-      "loose": true,
-      "modules": false
-    }]
+      "modules": false,
+      "loose": true
+    }],
+    "stage-0"
   ],
   "env": {
     "test": {

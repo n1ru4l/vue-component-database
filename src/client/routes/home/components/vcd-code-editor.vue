@@ -139,7 +139,7 @@
     // computed
     computed: {
       isSaveDisabled() {
-        return this.code === this.currentCode
+        return this.code === this.currentCode || !this.componentId
       },
       isCurrentUserTheComponentAuthor() {
         return this.currentUserId === this.componentAuthorId
@@ -157,6 +157,8 @@
       this.debounceSaveComponent = debounce(() => {
         this.saveComponent()
       }, 1000)
+    },
+    mounted() {
       this.updateCodePreview(this.currentCode)
     },
     methods: {
@@ -170,7 +172,7 @@
         Settings.setBoolean(SETTING_IS_AUTO_SAVE_ENABLED, value)
       },
       onRefreshButtonClicked() {
-        this.debounceUpdateCodePreview(this.code)
+        this.updateCodePreview(this.currentCode)
       },
       saveComponent() {
         this.showSavingToast = true
@@ -187,6 +189,14 @@
             componentId: this.componentId,
             contents: this.currentCode,
           },
+//          optimisticResponse: {
+//            __typename: `Mutation`,
+//            updateComponent: {
+//              __typename: `Component`,
+//              id: this.componentId,
+//              component: this.currentCode,
+//            }
+//          },
         }).then(() => {
           this.toastMessage = `Saved component successfully.`
           hideToast()
@@ -263,7 +273,7 @@
   }
 
   .vcd-code-editor__buttons > * {
-    display: block;
+    display: block !important;
   }
 
   .vcd-code-editor__buttons .mu-icon-button {

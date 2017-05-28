@@ -13,8 +13,7 @@
         :description="component.description"
         :authorLogin="component.author.login"
         :id="component.id"
-      >
-      </vcd-component-list-item>
+      />
     </template>
   </mu-list>
 </template>

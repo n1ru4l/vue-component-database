@@ -1,8 +1,8 @@
 <template>
   <div class="vcd-component-toolbar">
     <div class="component-toolbar__meta">
-      <strong>Title</strong>: {{component.title}}<br>
-      <strong>Description</strong>: {{component.description}}
+      <strong>Title</strong>: {{title}}<br>
+      <strong>Description</strong>: {{description}}
     </div>
     <div class="vcd-component-toolbar__download">
       <mu-float-button
@@ -42,9 +42,13 @@
       muFloatButton,
     },
     props: {
-      component: {
-        type: Object,
-        required: false,
+      title: {
+        type: String,
+        default: `new-component`,
+      },
+      description: {
+        type: String,
+        default: `Some description`,
       },
     },
     methods: {

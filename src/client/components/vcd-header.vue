@@ -25,6 +25,9 @@
         slot="right"
       />
     </template>
+    <vcd-offline-indicator
+      slot="right"
+    />
   </mu-app-bar>
 </template>
 <script>
@@ -34,6 +37,7 @@
   import vcdHeaderLoginButton from './vcd-header-login-button.vue'
   import vcdHeaderUserInfo from './vcd-header-user-info.vue'
   import vcdHeaderLogoutButton from './vcd-header-logout-button.vue'
+  import vcdOfflineIndicator from './vcd-offline-indicator.vue'
 
   export default {
     components: {
@@ -42,6 +46,7 @@
       vcdHeaderLoginButton,
       vcdHeaderUserInfo,
       vcdHeaderLogoutButton,
+      vcdOfflineIndicator,
     },
     props: {
       user: {

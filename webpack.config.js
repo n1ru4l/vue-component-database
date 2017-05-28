@@ -6,6 +6,10 @@ const ExtractTextPlugin = require(`extract-text-webpack-plugin`)
 const webpack = require(`webpack`)
 const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
 const BundleAnalyzerPlugin = require(`webpack-bundle-analyzer`).BundleAnalyzerPlugin
+const CopyWebpackPlugin = require(`copy-webpack-plugin`)
+const SWPrecacheWebpackPlugin = require(`sw-precache-webpack-plugin`)
+const HardSourceWebpackPlugin = require(`hard-source-webpack-plugin`)
+const objectHash = require(`node-object-hash`)()
 
 const { env } = process
 const IS_PRODUCTION = env.NODE_ENV === `production`
@@ -21,6 +25,60 @@ const definePlugin = new webpack.DefinePlugin({
   },
 })
 
+const serviceWorkerPlugin = new SWPrecacheWebpackPlugin({
+  cacheId: `vue-component-database`,
+  filename: `service-worker.js`,
+  maximumFileSizeToCacheInBytes: 4194304,
+  minify: true,
+  navigateFallback: `/index.html`,
+  navigateFallbackWhitelist: [
+    /^(?!\/login)/,
+    /^(?!\/graphql)/,
+  ],
+  // navigateFallbackWhitelist: [],
+  stripPrefix: `build/`,
+  staticFileGlobs: [
+    `build/index.html`,
+    `build/iframe.bundle.css`,
+    `build/iframe.bundle.js`,
+    `build/main.bundle.css`,
+    `build/main.bundle.js`,
+  ],
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/unpkg.com/,
+      handler: `cacheFirst`,
+    },
+    {
+      urlPattern: /^https:\/\/fonts.googleapis.com/,
+      handler: `cacheFirst`,
+    },
+    {
+      urlPattern: /https:\/\/[\w]*.githubusercontent.com/,
+      handler: `cacheFirst`,
+    },
+    {
+      urlPattern: /login/,
+      handler: `networkFirst`,
+    },
+  ],
+})
+
+const copyPlugin = new CopyWebpackPlugin([
+  { from: `index.html` }
+])
+
+const hardSourceWebpackPlugin = new HardSourceWebpackPlugin({
+  cacheDirectory: path.resolve(__dirname, `node_modules`, `.webpack-cache`, `[confighash]`),
+  recordsPath: path.resolve(__dirname, `node_modules`, `.webpack-cache`, `[confighash]`, `records.json`),
+  configHash: config => objectHash.hash(config),
+  environmentHash: {
+    root: process.cwd(),
+    directories: [ `node_modules` ],
+    files: [ `package.json` ],
+  },
+})
+
 module.exports = {
   entry: {
     main: path.join(__dirname, `src`, `client`, `main.js`),
@@ -31,18 +89,36 @@ module.exports = {
     filename: `[name].bundle.js`,
     publicPath: `/build/`,
   },
+  context: path.join(__dirname, `src`, `client`),
   module: {
     rules: [
       {
         test: /\.js$/,
         loader: `babel-loader`,
-        exclude: [ /node_modules\/postcss/ ],
+        include: [
+          /node_modules\/muse-ui/,
+          /src\/client/,
+        ],
       },
       {
         test: /\.vue$/,
         loader: `vue-loader`,
         options: {
           extractCSS: IS_PRODUCTION,
+          loaders: {
+            less: [
+              `vue-style-loader`,
+              `css-loader`,
+              {
+                loader: `less-loader`,
+                options: {
+                  globalVars: {
+                    theme: `teal`,
+                  },
+                },
+              },
+            ],
+          }
         },
       },
       {
@@ -66,11 +142,11 @@ module.exports = {
       },
     ],
   },
+  externals: {
+    vue: `Vue`,
+    'babel-standalone': `Babel`,
+  },
   resolve: {
-    alias: {
-      babel: `Babel`,
-      vue: `vue/dist/vue.esm.js`, // We need the template  compiler included build!
-    },
     extensions: [
       `.webpack.js`,
       `.web.js`,
@@ -84,8 +160,11 @@ module.exports = {
     ],
   },
   plugins: [
+    hardSourceWebpackPlugin,
     extractStyles,
     definePlugin,
+    copyPlugin,
+    serviceWorkerPlugin,
   ],
   devServer: {
     port: env.WEBPACK_DEV_PORT,
@@ -104,6 +183,7 @@ if (IS_PRODUCTION) {
     analyzerMode: `static`,
     reportFilename: `bundle.info.html`,
   })
+
   module.exports.plugins.push(
     optimizeCssAssetsPlugin,
     uglifyJsPlugin,
@@ -113,5 +193,8 @@ if (IS_PRODUCTION) {
   module.exports.devtool = `#cheap-module-eval-source-map`
 
   const hotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin()
-  module.exports.plugins.push(hotModuleReplacementPlugin)
+
+  module.exports.plugins.push(
+    hotModuleReplacementPlugin
+  )
 }

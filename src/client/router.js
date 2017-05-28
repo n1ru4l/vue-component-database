@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 import Authenticator from './services/authenticator'
 
 import Main from './routes/home'

@@ -2,6 +2,7 @@
   <div class="vcd-component-viewer">
     <slot name="buttons"/>
     <iframe
+      sandbox="allow-same-origin allow-scripts"
       class="vcd-component-viewer__iframe"
       src="about:blank"
       ref="iframe"
@@ -24,6 +25,7 @@
   </div>
 </template>
 <script>
+  import { transform } from 'babel-standalone'
   import {
     flow as compose,
     update,
@@ -39,13 +41,9 @@
   import muCircularProgress from 'muse-ui/src/circularProgress/circularProgress.vue'
   import vcdErrorLog from './vcd-error-log.vue'
 
-
-  const { Babel } = global
-//  const Babel = require(`babel-standalone`)
-
   const transformCodeToEs5 = compose(
     replaceECMAExportWithCJSExport,
-    code => Babel.transform(code, { presets: [ `es2015` ] }).code
+    code => transform(code, { presets: [ `es2015` ] }).code
   )
 
   const codeToParts = (doc, scopeAttr = uniqueId(`data-v-`)) => compose(
@@ -63,6 +61,16 @@
     parts => update(parts, `scopedStyleDoc`, styleDoc => styleDoc && scopeStyleDoc(styleDoc, scopeAttr))
   )(doc)
 
+  const scriptSources = [
+    `https://unpkg.com/vue@2.3.3/dist/vue.js`,
+    window.IFRAME_BUNDLE_URL,
+  ]
+  const createScriptTag = (src) => {
+    const scriptTag = document.createElement(`script`)
+    scriptTag.setAttribute(`src`, src)
+    return scriptTag
+  }
+
   /* eslint-disable no-param-reassign */
   const prepareIframe = iframe => new Promise((resolve) => {
     iframe.src = `about:blank`
@@ -73,23 +81,19 @@
           <main id="main"></main>
         </body>
       `
-      const elements = []
-      const scriptTag = document.createElement(`script`)
-      scriptTag.setAttribute(`src`, window.IFRAME_BUNDLE_URL)
-      scriptTag.setAttribute(`crossorigin`, `anonymous`)
-      elements.push(scriptTag)
+      const elements = scriptSources.map(createScriptTag)
 
       if (process.env.NODE_ENV === `production`) {
         const styleTag = document.createElement(`link`)
         styleTag.setAttribute(`rel`, `stylesheet`)
         styleTag.setAttribute(`type`, `text/css`)
-        styleTag.setAttribute(`href`, `/assets/iframe.bundle.css`)
+        styleTag.setAttribute(`href`, `/iframe.bundle.css`)
         elements.push(styleTag)
       }
-      // eslint-disable-next-line no-return-assign
-      const promises = elements.map(element => new Promise(res => element.onload = res))
-      elements.forEach(element => iframe.contentWindow.document.body.appendChild(element))
-      Promise.all(promises).then(resolve)
+      elements.reduce((promise, element) => promise.then(() => new Promise((res) => {
+        element.onload = res
+        iframe.contentWindow.document.body.appendChild(element)
+      })), Promise.resolve()).then(resolve)
     }
   })
   /* eslint-enable no-param-reassign */
@@ -99,12 +103,6 @@
       muCircularProgress,
       vcdErrorLog,
     },
-    props: {
-      code: {
-        type: String,
-        default: ``,
-      },
-    },
     data: () => ({
       isComponentGenerating: true,
       errors: [],
@@ -113,16 +111,21 @@
     created() {
       window.addEventListener(`message`, this.onReceiverMessageFromIframe)
     },
-
-    watch: {
-      code() {
+    methods: {
+      onReceiverMessageFromIframe(ev) {
+        const { data } = ev
+        if (data.type === `FINISHED_RENDER` && data.success) {
+          this.isComponentGenerating = false
+        }
+      },
+      updateIframe(code) {
         const { iframe } = this.$refs
         this.isComponentGenerating = true
         this.errors = []
 
         let parts = null
         try {
-          parts = codeToParts(this.code)
+          parts = codeToParts(code)
         } catch (err) {
           this.errors.push(err)
           this.isComponentGenerating = false
@@ -136,15 +139,7 @@
           }
           iframe.contentWindow.postMessage(message, `*`)
         })
-      },
-    },
-    methods: {
-      onReceiverMessageFromIframe(ev) {
-        const { data } = ev
-        if (data.type === `FINISHED_RENDER` && data.success) {
-          this.isComponentGenerating = false
-        }
-      },
+      }
     }
   }
 </script>
